@@ -3,7 +3,7 @@
     <display-name>Descritor de Implantação</display-name>
     <servlet>
         <servlet-name>ControllerServlet</servlet-name>
-        <servlet-class>controller.ControllerServlet</servlet-class>
+        <servlet-class>teste.NewServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>ControllerServlet</servlet-name>
@@ -22,6 +22,5 @@
     </session-config>
     <welcome-file-list>
         <welcome-file>Home.jsp</welcome-file>
-        
     </welcome-file-list>
 </web-app>

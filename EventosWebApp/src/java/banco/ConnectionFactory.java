@@ -15,7 +15,7 @@ import java.sql.SQLException;
  * @author Elcio Cestari Taira
  * @version 1.0
  * @since 11/mar/2017
- * 
+ *
  */
 public class ConnectionFactory {
 
@@ -24,8 +24,10 @@ public class ConnectionFactory {
     private String password;
 
     /**
-     * Inicializa os parametros para serem feitos a conexao com o SGBD 
-     * @param url - caminho utilizado para abrir a conexao. Exemplo: jdbc:mysql://localhost:3306/meubanco
+     * Inicializa os parametros para serem feitos a conexao com o SGBD
+     *
+     * @param url - caminho utilizado para abrir a conexao. Exemplo:
+     * jdbc:mysql://localhost:3306/meubanco
      * @param user - usuario do SGBD. Exemplo: admin
      * @param password - senha do SGBD. Exemplo: admin
      */
@@ -34,13 +36,24 @@ public class ConnectionFactory {
         this.user = user;
         this.password = password;
     }
-    
-    
+
+    /**
+     * Realiza a conexao com o SGBD mysql 
+     * com um banco de dados chamado bancoteste
+     * e comm o usuario e senha "admin"
+     */
+    public ConnectionFactory() {
+        this.url = "jdbc:mysql://localhost:3306/bancoteste";
+        this.user = "admin";
+        this.password = "admin";
+    }
+
     /**
      * Obtem uma conexão com o SGBD
-     * @return Conexão com o SGBD  
+     *
+     * @return Conexão com o SGBD
      * @throws ClassNotFoundException
-     * @throws SQLException 
+     * @throws SQLException
      */
     public Connection getConnection() throws ClassNotFoundException, SQLException {
 
@@ -54,15 +67,15 @@ public class ConnectionFactory {
         }
         return null;
     }
-    
+
     /**
-     * 
+     *
      * @param url - caminho utilizado para abrir a conexao
-     * @param user - usuario do SGBD 
+     * @param user - usuario do SGBD
      * @param password - senha do usuario do sgbd
      * @return
      * @throws ClassNotFoundException
-     * @throws SQLException 
+     * @throws SQLException
      */
     public Connection getConnection(String url, String user, String password) throws ClassNotFoundException, SQLException {
 
