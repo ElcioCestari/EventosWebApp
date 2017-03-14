@@ -39,11 +39,11 @@ public class ConnectionFactory {
 
     /**
      * Realiza a conexao com o SGBD mysql 
-     * com um banco de dados chamado bancoteste
+     * com um banco de dados chamado eventoswebapp
      * e comm o usuario e senha "admin"
      */
     public ConnectionFactory() {
-        this.url = "jdbc:mysql://localhost:3306/bancoteste";
+        this.url = "jdbc:mysql://localhost:3306/eventoswebapp";
         this.user = "admin";
         this.password = "admin";
     }

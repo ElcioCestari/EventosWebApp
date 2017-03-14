@@ -55,6 +55,10 @@ public class ControllerServlet extends HttpServlet {
         }else if (request.getRequestURI().endsWith("/Perfil")) {
             request.setAttribute("tituloDaPagina", "Perfil");
             jsp = "Perfil.jsp";
+        }else if (request.getRequestURI().endsWith("/SalvarUsuario")){
+            request = new UserController().salvarUsuario(request);
+            request.setAttribute("tituloDaPagina", "Mensagem");
+            jsp = "Mensagem.jsp";
         }
 
         request.getRequestDispatcher(jsp).forward(request, response);

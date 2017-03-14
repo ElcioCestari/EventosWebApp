@@ -31,8 +31,15 @@ public class Usuario {
     private int id_usuario;
     private String senha;
 
+    public Usuario() {
+    }
+
     public Usuario(String login, String nome, int idade, int id_usuario, String senha) {
+        this(login, nome, idade, senha);
         this.setId_usuario(id_usuario);
+    }
+
+    public Usuario(String login, String nome, int idade, String senha) {
         this.setIdade(idade);
         this.setLogin(login);
         this.setNome(nome);

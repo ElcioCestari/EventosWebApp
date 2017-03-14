@@ -5,7 +5,7 @@ package teste;
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
+import banco.UsuarioDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -34,8 +34,7 @@ public class NewServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        
-        
+
         String jsp = null;
         if (request.getRequestURI().endsWith("/Home")) {
             request.setAttribute("tituloDaPagina", "Home");
@@ -49,19 +48,30 @@ public class NewServlet extends HttpServlet {
         } else if (request.getRequestURI().endsWith("/CadastrarEvento")) {
             request.setAttribute("tituloDaPagina", "CadastrarEvento");
             jsp = "CadastrarEvento.jsp";
-        }else if (request.getRequestURI().endsWith("/CadastrarUsuario")) {
-            request.setAttribute("tituloDaPagina", "CadastrarUsuario");
+        } else if (request.getRequestURI().endsWith("/CadastrarUsuario")) {
+            
+
+            UsuarioDAO usrDAO = new UsuarioDAO();
+            Usuario usr = new Usuario("elciotaira@gmail", "Elcio", 30, 5, "123");
+            try{
+            usrDAO.create(usr);
+            
+            request.setAttribute("tituloDaPagina", usrDAO.findById(1));
+            } catch (Exception e){
+                
+            }
+
             jsp = "CadastrarUsuario.jsp";
-        }else if (request.getRequestURI().endsWith("/Mensagem")) {
+        } else if (request.getRequestURI().endsWith("/Mensagem")) {
             request.setAttribute("tituloDaPagina", new UsuarioTesteBanco("elcio").getMensagem());
             jsp = "Mensagem.jsp";
-        }else if (request.getRequestURI().endsWith("/Perfil")) {
+        } else if (request.getRequestURI().endsWith("/Perfil")) {
             request.setAttribute("tituloDaPagina", "Perfil");
             jsp = "Perfil.jsp";
         }
 
         request.getRequestDispatcher(jsp).forward(request, response);
-        
+
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

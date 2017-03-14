@@ -3,7 +3,7 @@
     <display-name>Descritor de Implantação</display-name>
     <servlet>
         <servlet-name>ControllerServlet</servlet-name>
-        <servlet-class>teste.NewServlet</servlet-class>
+        <servlet-class>controller.ControllerServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>ControllerServlet</servlet-name>
@@ -14,6 +14,7 @@
         <url-pattern>/LoginPage</url-pattern>
         <url-pattern>/CadastrarUsuario</url-pattern>
         <url-pattern>/Mensagem</url-pattern>
+        <url-pattern>/SalvarUsuario</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
