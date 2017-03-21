@@ -3,18 +3,17 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package banco;
+package banco.dao;
 
+import banco.ConnectionFactory;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import model.Usuario;
 
 /**
- * Classe que realiza as operações no banco de dados, tais como: create, read,
- * update e delete.
+ * Classe que realiza as operações no banco de dados, tais como: create, 
+ * findByLogin e verificaAutenticacao
  *
  * @author Elcio Cestari Taira
  * @version 1.0
@@ -23,6 +22,7 @@ import model.Usuario;
 public class UsuarioDAO extends ConnectionFactory implements BaseDAO {
 
     private String sql = null;//sera a variavel que contera as instruções em sql
+
     private PreparedStatement statement = null;//prepara o SQL que será executado
     private ResultSet resultado = null;//sera usado para o armazenar temporariamente o resultado das query
 
@@ -33,6 +33,8 @@ public class UsuarioDAO extends ConnectionFactory implements BaseDAO {
         super();
     }
 
+    
+    
     /**
      * <p>
      * Recebe um objeto do tipo Usuario configura os seguintes atributos:
@@ -68,9 +70,9 @@ public class UsuarioDAO extends ConnectionFactory implements BaseDAO {
         } catch (SQLException e) {
             throw new Exception("Erro ao configurar os parametros do usuario: " + e.getMessage());
         }
-        //executa o sql no banco
+        
         try {
-            statement.execute();
+            statement.execute();//executa o sql no banco
         } catch (SQLException e) {
             throw new Exception("Erro ao executar a inserção no banco: " + e.getMessage());
         } finally {
@@ -115,4 +117,55 @@ public class UsuarioDAO extends ConnectionFactory implements BaseDAO {
         return new Usuario("", "", id_usuario, id_usuario, "");
     }
 
+    /**
+     * Faz um select no banco buscando os logins SELECT * FROM usuario WHERE login = (parametro repassado para o metodo)
+     * @param login 
+     * @return - true se encontrou o login e false caso contrario
+     * @throws Exception 
+     */
+    public boolean findByLogin(String login) throws Exception {
+        this.sql = "SELECT * FROM usuario WHERE login = " + "'" + login + "';";
+        statement = getConnection().prepareStatement(sql);
+        resultado = statement.executeQuery();
+        while(resultado.next()){
+            if(resultado.getString("login").equals(login))
+                return true;
+        }
+        return false;
+    }
+    
+    
+    /**
+     * Verifica se existe o usuario no banco
+     * <p/>
+     * Metodo que verfica se os parametro passados (login e senha)
+     * batem com os valores salvos na tabela usuario nos campos login e senha.
+     * Caso sejam os mesmos returna true, caso contrario false.
+     * <p/>
+     * Esse metodo é interessando para veriricar se o usuario pode logar.
+     * @param login
+     * @param senha
+     * @return - boolean (true: existe o usuario e confere a senha, false: não confere a senha )
+     * @throws SQLException
+     * @throws Exception 
+     */
+    public boolean verificaAutenticacao(String login, String senha) throws SQLException, Exception {
+        
+        //SELECT * FROM usuario WHERE login = 'elcio@email.com' AND senha = 123;
+        //instrução SQL q sera executada no banco
+        //deve percorrer todas as tuplas da tabela usuario
+        //e retornar a row com usuario e sinha igual aos repassados no paratro do metodo
+        this.sql = "SELECT * FROM usuario WHERE login = " + "'" + login + "'" 
+                                        + "AND senha = " + "'" + senha + "';";
+        
+        statement = getConnection().prepareStatement(sql);
+        resultado = statement.executeQuery();
+        
+        while(resultado.next()){
+            if(resultado.getString("senha").equals(senha) && resultado.getString("login").equals(login) ){
+                return true;
+            }
+        }
+        return false;
+    }
 }

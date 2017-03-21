@@ -15,6 +15,7 @@
         <url-pattern>/CadastrarUsuario</url-pattern>
         <url-pattern>/Mensagem</url-pattern>
         <url-pattern>/SalvarUsuario</url-pattern>
+        <url-pattern>/Logar</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
@@ -22,6 +23,6 @@
         </session-timeout>
     </session-config>
     <welcome-file-list>
-        <welcome-file>Home.jsp</welcome-file>
+        <welcome-file>index.jsp</welcome-file>
     </welcome-file-list>
 </web-app>

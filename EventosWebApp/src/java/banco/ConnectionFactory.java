@@ -7,6 +7,8 @@ package banco;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
@@ -19,35 +21,13 @@ import java.sql.SQLException;
  */
 public class ConnectionFactory {
 
-    private String url;
-    private String user;
-    private String password;
+    private static final String driver = "com.mysql.jdbc.Driver";
+    private static final String url = "jdbc:mysql://localhost:3306/eventoswebapp";
+    private static final String user = "admin";
+    private static final String password = "admin";
 
-    /**
-     * Inicializa os parametros para serem feitos a conexao com o SGBD
-     *
-     * @param url - caminho utilizado para abrir a conexao. Exemplo:
-     * jdbc:mysql://localhost:3306/meubanco
-     * @param user - usuario do SGBD. Exemplo: admin
-     * @param password - senha do SGBD. Exemplo: admin
-     */
-    public ConnectionFactory(String url, String user, String password) {
-        this.url = url;
-        this.user = user;
-        this.password = password;
-    }
 
-    /**
-     * Realiza a conexao com o SGBD mysql 
-     * com um banco de dados chamado eventoswebapp
-     * e comm o usuario e senha "admin"
-     */
-    public ConnectionFactory() {
-        this.url = "jdbc:mysql://localhost:3306/eventoswebapp";
-        this.user = "admin";
-        this.password = "admin";
-    }
-
+    private PreparedStatement statement = null;
     /**
      * Obtem uma conexão com o SGBD
      *
@@ -58,29 +38,7 @@ public class ConnectionFactory {
     public Connection getConnection() throws ClassNotFoundException, SQLException {
 
         try {
-            Class.forName("com.mysql.jdbc.Driver");
-            return DriverManager.getConnection(url, user, password);
-        } catch (SQLException e) {
-            new SQLException("Não foi possível conectar-se ao banco de dados");
-        } catch (ClassNotFoundException e) {
-            new ClassNotFoundException("Não foi possivel registrar o driver jdbc do mysql");
-        }
-        return null;
-    }
-
-    /**
-     *
-     * @param url - caminho utilizado para abrir a conexao
-     * @param user - usuario do SGBD
-     * @param password - senha do usuario do sgbd
-     * @return
-     * @throws ClassNotFoundException
-     * @throws SQLException
-     */
-    public Connection getConnection(String url, String user, String password) throws ClassNotFoundException, SQLException {
-
-        try {
-            Class.forName("com.mysql.jdbc.Driver");
+            Class.forName(driver);
             return DriverManager.getConnection(url, user, password);
         } catch (SQLException e) {
             new SQLException("Não foi possível conectar-se ao banco de dados");

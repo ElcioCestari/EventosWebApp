@@ -7,15 +7,23 @@ package controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
+ * Servlet responsavel por fazer os direcionamentos das requisiçoes recebe um
+ * objeto HttpServletRequest verifica e direciona a requisição para o
+ * responsavel e depois devolve um HttpServletResponse.
  *
- * @author 201319020135
+ * @author Elcio Cestari Taira
+ * @version 1.0
+ * @since 20/mar/2017
  */
 @WebServlet(name = "ControllerServlet", urlPatterns = {"/ControllerServlet"})
 public class ControllerServlet extends HttpServlet {
@@ -33,32 +41,50 @@ public class ControllerServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
 
-        String jsp = null;
-        if (request.getRequestURI().endsWith("/Home")) {
+        String jsp = null;//variavel utilizada para configurar qual arquivo JSP será selecionado
+
+        if (request.getRequestURI().endsWith("/index")) {//faz o redirecionamento para a home, com os dados carregados
             request.setAttribute("tituloDaPagina", "Home");
-            jsp = "Home.jsp";
+            jsp = "home.jsp";
+
+        } else if (request.getRequestURI().endsWith("/Home")) {
+            request.setAttribute("tituloDaPagina", "Home");
+            jsp = "home.jsp";
         } else if (request.getRequestURI().endsWith("/Evento")) {
             request.setAttribute("tituloDaPagina", "Evento");
-            jsp = "Evento.jsp";
+            jsp = "evento.jsp";
         } else if (request.getRequestURI().endsWith("/LoginPage")) {
             request.setAttribute("tituloDaPagina", "LoginPage");
-            jsp = "LoginPage.jsp";
+            jsp = "login.jsp";
         } else if (request.getRequestURI().endsWith("/CadastrarEvento")) {
-            request.setAttribute("tituloDaPagina", "CadastrarEvento");
-            jsp = "CadastrarEvento.jsp";
-        }else if (request.getRequestURI().endsWith("/CadastrarUsuario")) {
+            request.setAttribute("tituloDaPagina", "Cadastrar Evento");
+            jsp = "cadastrar_evento.jsp";
+        } else if (request.getRequestURI().endsWith("/CadastrarUsuario")) {
             request.setAttribute("tituloDaPagina", "CadastrarUsuario");
-            jsp = "CadastrarUsuario.jsp";
-        }else if (request.getRequestURI().endsWith("/Mensagem")) {
+            jsp = "cadastrar_usuario.jsp";
+        } else if (request.getRequestURI().endsWith("/Mensagem")) {
             request.setAttribute("tituloDaPagina", "Mensagem");
-            jsp = "Mensagem.jsp";
-        }else if (request.getRequestURI().endsWith("/Perfil")) {
+            jsp = "mensagem.jsp";
+        } else if (request.getRequestURI().endsWith("/Perfil")) {//requisição para entrar na pagina de perfil
             request.setAttribute("tituloDaPagina", "Perfil");
-            jsp = "Perfil.jsp";
-        }else if (request.getRequestURI().endsWith("/SalvarUsuario")){
-            request = new UserController().salvarUsuario(request);
+            jsp = "perfil.jsp";
+        } else if (request.getRequestURI().endsWith("/SalvarUsuario")) {
+            //requisição para salvar o usuário
+
+            try {//tenta salvar um usuario
+                request = new UserController().salvarUsuario(request);
+            } catch (Exception e) {
+                request.setAttribute("mensagem", e.getMessage());
+            }
+
             request.setAttribute("tituloDaPagina", "Mensagem");
-            jsp = "Mensagem.jsp";
+            jsp = "mensagem.jsp";
+        } else if (request.getRequestURI().endsWith("/Logar")) {
+            if (new UserController().logar(request)) {
+            } else {
+            }
+
+            jsp = "mensagem.jsp";
         }
 
         request.getRequestDispatcher(jsp).forward(request, response);

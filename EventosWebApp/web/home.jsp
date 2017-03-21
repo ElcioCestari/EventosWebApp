@@ -14,26 +14,20 @@
     <body>
 
         <nav class="navbar navbar-inverse navbar-fixed-top">
-
-
             <div class="container-fluid">
-                
-                
-                
-            <div class="navbar-header">
-                <a class="navbar-brand" href="${pageContext.request.contextPath}/Home">Eventos Web</a>
-            </div>
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="${pageContext.request.contextPath}/Home">Eventos Web</a>
+                </div>
                 <ul class="nav navbar-nav">
-                    <li ><a href="${pageContext.request.contextPath}/Home">Home</a></li>
-                </ul>
-                <ul class="nav navbar-nav">
-                    <li class="active"><a href="${pageContext.request.contextPath}/LoginPage">Login</a></li>
+                    <li class="active" ><a href="${pageContext.request.contextPath}/Home">Home</a></li>
                 </ul>
                 <ul class="nav navbar-nav">
                     <li ><a href="${pageContext.request.contextPath}/Perfil">Perfil</a></li>
                 </ul>
-                
-                
+                <ul class="nav navbar-nav">
+                    <li><a href="${pageContext.request.contextPath}/CadastrarEvento">Cadastrar Evento</a></li>
+                </ul>
+
                 <ul class="nav navbar-nav navbar-right">
                     <li><a href="${pageContext.request.contextPath}/CadastrarUsuario"><span class="glyphicon glyphicon-user"></span> Criar Conta</a></li>
                     <li><a href="${pageContext.request.contextPath}/LoginPage"><span class="glyphicon glyphicon-log-in"></span> Fazer login</a></li>
@@ -45,38 +39,14 @@
             <h2 class="subtituloDaPagina">Encontre e divulgue os seus eventos preferidos!</h2> 
         </header>
 
-        <div class="container">
-            <div class="row">
-                <div class="col-md-4">
-                    <img src="https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcStfDAuvu8lCkbu5ugjEKhsT00G01fnZLhSAbhNFbiza8MIFZfUjYA8n4A">
-                    </img>
-                </div>
-                <div class="col-md-8">
-                    <h3>Titulo da Festa</h3>
-                    <p>Aqui vai uma breve descrição do que conterá na festa</p>
-                    <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris...</p>
-                </div>
-            </div><div class="row">
-                <div class="col-md-4">
-                    <img src="https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcStfDAuvu8lCkbu5ugjEKhsT00G01fnZLhSAbhNFbiza8MIFZfUjYA8n4A">
-                    </img>
-                </div>
-                <div class="col-md-8">
-                    <h3>Titulo da Festa</h3>
-                    <p>Aqui vai uma breve descrição do que conterá na festa</p>
-                    <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris...</p>
-                </div>
-            </div>
-        </div>
+
         <footer class="col-md-12">
             <div class="row">
                 <p class="col-sm-4 direitos_autorais">&copy; 2017 Celso &AMP; Elcio &AMP; Nélio</p>
                 <ul class="col-sm-8">
-                    <li class="col-sm-1">
-                        <img src="https://s3.amazonaws.com/codecademy-content/projects/make-a-website/lesson-4/twitter.svg">
+                    <li class="col-sm-1"><a href="https://twitter.com/?lang=pt-br"><img src="https://s3.amazonaws.com/codecademy-content/projects/make-a-website/lesson-4/twitter.svg"></a>
                     </li>
-                    <li class="col-sm-1">
-                        <img src="https://s3.amazonaws.com/codecademy-content/projects/make-a-website/lesson-4/facebook.svg">
+                    <li class="col-sm-1"><a href="https://www.facebook.com/"><img src="https://s3.amazonaws.com/codecademy-content/projects/make-a-website/lesson-4/facebook.svg"></a>
                     </li>
                 </ul>
             </div>

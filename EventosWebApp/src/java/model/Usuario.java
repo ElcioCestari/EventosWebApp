@@ -28,18 +28,27 @@ public class Usuario {
     private String login;
     private String nome;
     private int idade;
-    private int id_usuario;
+    private static int id_usuario = 0;
     private String senha;
 
     public Usuario() {
+        id_usuario++;
     }
 
+    /**
+     * @deprecated - mesmo motivo do setId_usuario;
+     * @param login
+     * @param nome
+     * @param idade
+     * @param id_usuario
+     * @param senha 
+     */
     public Usuario(String login, String nome, int idade, int id_usuario, String senha) {
         this(login, nome, idade, senha);
-        this.setId_usuario(id_usuario);
     }
 
     public Usuario(String login, String nome, int idade, String senha) {
+        this();
         this.setIdade(idade);
         this.setLogin(login);
         this.setNome(nome);
@@ -51,6 +60,8 @@ public class Usuario {
     }
 
     /**
+     * @deprecated - nao eh mais necessario pois a id_usuario passou a ser statica
+     * 
      * Metodo privado pois deve ser utilizado somente pelos objetos Usuario e em
      * seu construtor.
      *
@@ -129,16 +140,17 @@ public class Usuario {
     /**
      * retorna uma String contendo o nome o login e a idade de um usuario no
      * seguinte formato:
-     * <strong>Nome: Fulano da Silva Idade: 30 Login:
-     * meulogin@email.com</strong>
+     * <strong>Nome:</strong> Fulano da Silva <br>
+     * <strong>Idade:</strong> 30 <br>
+     * <strong>Login:</strong> meulogin@email.com <br>
      *
      * @return
      */
     @Override
     public String toString() {
-        return "Nome: " + this.getNome()
-                + "Idade: " + this.getIdade()
-                + "Login: " + this.getLogin();
+        return "Nome: " + this.getNome() + "\n" 
+                + "Idade: " + this.getIdade()+ "\n" 
+                + "Login: " + this.getLogin() + "\n" ;
     }
 
 }
