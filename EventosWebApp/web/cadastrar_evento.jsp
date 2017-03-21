@@ -1,7 +1,7 @@
 <%-- 
     Document   : Home
     Created on : 09/03/2017, 21:32:11
-    Author     : 201319020135
+    Author     : Elcio Cestari Taira
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -25,13 +25,13 @@
                     <a class="navbar-brand" href="${pageContext.request.contextPath}/Home">Eventos Web</a>
                 </div>
                 <ul class="nav navbar-nav">
-                    <li  ><a href="${pageContext.request.contextPath}/Home">Home</a></li>
+                    <li ><a href="${pageContext.request.contextPath}/Home">Home</a></li>
                 </ul>
                 <ul class="nav navbar-nav">
                     <li ><a href="${pageContext.request.contextPath}/Perfil">Perfil</a></li>
                 </ul>
                 <ul class="nav navbar-nav">
-                    <li class="active"><a href="${pageContext.request.contextPath}/CadastrarEvento">Cadastrar Evento</a></li>
+                    <li class="active" ><a href="${pageContext.request.contextPath}/CadastrarEvento">Cadastrar Evento</a></li>
                 </ul>
 
                 <ul class="nav navbar-nav navbar-right">
@@ -40,16 +40,57 @@
                 </ul>
             </div>
         </nav>
-
-        <header class="jumbotron text-center col-md-12"><h1>${tituloDaPagina}</h1></header>
-
+                <br><br><br><br>
         <section class="container">
-            <form class="col-md-6" action="${pageContext.request.contextPath}/SalvarEvento" method="post" autocomplete="on">
-                <div class="form-group">
-                    <label for="nome">Nome:</label>
-                    <input type="text" class="form-control" id="nome" name="nome" placeholder="Nome do seu evento" size="40" required>
-                </div>
-                <input type="submit" class="btn btn-default" value="Salvar"></input>
+            <form class="col-md-6" action="${pageContext.request.contextPath}/salvarEvento" method="post" autocomplete="on">
+                <fieldset><legend><strong>Detalhes do evento:</strong></legend>
+                    <div class="form-group">
+                        <label for="nomeEvento">Nome:</label>
+                        <input type="text" class="form-control" id="nomeEvento" name="nomeEvento" placeholder="Nome de Evento" size="40" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="tipo_evento">Tipo:</label>
+                        <input type="text" class="form-control" id="tipo_evento" name="tipo_evento" placeholder="Tipo de Evento" size="40" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="descricao">Descrição:</label>
+                        <input type="text" class="form-control" id="descricao" name="descricao" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="valor">Valor:</label>
+                        <input type="number" class="form-control" id="valor" name="valor" min="0" placeholder="Qual o valor?" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="faixaEtaria">Faixa Etaria</label>
+                        <input type="number" class="form-control" id="faixaEtaria" name="faixaEtaria" placeholder="Qual a faixa etaria do evento?" min="0" max="21" required>
+                    </div>
+                </fieldset><br><br>
+                <fieldset><legend><strong>Detalhes do Local:</strong></legend>
+                    <div class="form-group">
+                        <label for="nomeLocal">Nome:</label>
+                        <input type="text" class="form-control" id="nomeLocal" name="nomeLocal" placeholder="Nome de Local" size="40" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="capacidade">Capacidade:</label>
+                        <input type="number" class="form-control" id="capacidade" name="capacidade" placeholder="Qual a capacidade?" min="1" required>
+                    </div>
+                </fieldset><br><br>
+                <fieldset><legend><strong>Detalhes do Endereco:</strong></legend>
+                    <div class="form-group">
+                        <label for="rua">Rua</label>
+                        <input type="text" class="form-control" id="rua" name="rua" placeholder="Nome da rua" size="40" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="cidade">Cidade:</label>
+                        <input type="text" class="form-control" id="cidade" name="cidade" placeholder="Nome da cidade" size="40" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="estado">Estado:</label>
+                        <input type="text" class="form-control" id="estado" name="estado" placeholder="Nome do Estado" size="2" required>
+                    </div>
+                </fieldset>
+
+                <input type="submit" class="btn btn-default" value="Salvar"></input> 
             </form>
         </section>
 
@@ -66,6 +107,7 @@
                 </ul>
             </div>
         </footer>
+
     </body>
 </html>
 

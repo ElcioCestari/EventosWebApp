@@ -7,9 +7,8 @@ package controller;
 
 import banco.dao.UsuarioDAO;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import model.Usuario;
 
 /**
@@ -29,14 +28,14 @@ public class UserController {
 
     /**
      * Recebe um request e pega os paremetros login e senha salvos nesse request
-     * e depois faz uma busca no banco na tabela usuario
-     * e verifica se as colunas login e senha 
-     * conferem cos os parametros repassados atraves do request.
-     * Caso esses parametros sejam os mesmos ele cria uma nova sessao e seta o atributo da sessao 
-     * autorizao como true.
-     * 
+     * e depois faz uma busca no banco na tabela usuario e verifica se as
+     * colunas login e senha conferem cos os parametros repassados atraves do
+     * request. Caso esses parametros sejam os mesmos ele cria uma nova sessao e
+     * seta o atributo da sessao autorizao como true.
+     *
      * @param request
-     * @return - true: caso os valores dos paremetros sejam iguais aos valores do banco, false: caso contrario. 
+     * @return - true: caso os valores dos paremetros sejam iguais aos valores
+     * do banco, false: caso contrario.
      */
     public boolean logar(HttpServletRequest request) {
 
@@ -44,22 +43,27 @@ public class UserController {
         String senha = null;
         login = (String) request.getParameter("login");
         senha = (String) request.getParameter("senha");
-        
-        
+
         try {
-            if( new UsuarioDAO().verificaAutenticacao(login, senha)){
-                if(request.getSession().getAttribute("autorizacao") == null){
-                    request.getSession().setAttribute("autorizao", new Boolean(true));
+            if (new UsuarioDAO().verificaAutenticacao(login, senha)) {
+                request.getSession().invalidate();
+                HttpSession session = request.getSession(true);
+                session.setAttribute("autorizacao", new Boolean(true));
+                
+                /*
+                if (request.getSession().getAttribute("autorizacao") == null) {
+                    request.getSession().setAttribute();
                 }
+                */
                 request.setAttribute("mensagem", "Logado com sucesso");
                 return true;
             }
         } catch (Exception ex) {
             request.setAttribute("mensagem", "Login falhou!");
+            return false;
         }
         return false;
-        
-            
+
     }
 
     /**
@@ -93,13 +97,31 @@ public class UserController {
             mensagem = "Dados salvo com sucesso!";//mensagem positiva
             listaDeUsuarios.add(usuario);//adiciona um novo usuario a listadeUsuarios
         } catch (Exception e) {
-            usuario = null;
+            //usuario = null;
             mensagem = "Desculpe ocorreu um erro ao salvar os seus dados!";//mensagem que não conseguiu salvar
             mensagem = e.getMessage();//APENAS PARA DEBUG
         } finally {
             request.setAttribute("mensagem", mensagem);//seta a 'mensagem' do request
         };
-
         return request;//request para ser utilizado no servlet
+    }
+
+    /**
+     * Verifica na sessao através do atributo 'autorizacao' se o usuario esta ou
+     * não logado
+     *
+     * @see - logar()
+     * @param - request
+     * @return - true: se o usuario esta logado na sessao; false: caso não
+     * esteja
+     */
+    public boolean estaLogado(HttpServletRequest request) {
+        
+        if (request.getSession().getAttribute("autorizacao") == null ||
+            request.getSession().getAttribute("autorizacao").equals(false)){
+            
+            return false;
+        }
+        return true;
     }
 }
