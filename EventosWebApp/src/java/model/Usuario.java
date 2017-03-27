@@ -28,58 +28,71 @@ public class Usuario {
     private String login;
     private String nome;
     private int idade;
-    private static int id_usuario = 0;
+    private int  id_usuario;
     private String senha;
-
-    public Usuario() {
-        id_usuario++;
+    
+    /**
+     * Construtor padrão, onde será uma nova Instancia de Usuario será criado com um identificador unico
+     */
+    public Usuario(int id_usuario) {
+        this.setId_usuario(id_usuario);
     }
 
     /**
-     * @deprecated - mesmo motivo do setId_usuario;
-     * @param login
-     * @param nome
-     * @param idade
-     * @param id_usuario
-     * @param senha 
+     * @param id_usuario    int
+     * @param login     String
+     * @param nome      String
+     * @param idade     int
+     * @param senha     String
      */
     public Usuario(String login, String nome, int idade, int id_usuario, String senha) {
-        this(login, nome, idade, senha);
+        this(id_usuario);
+        this.login = login;
+        this.nome = nome;
+        this.idade = idade;
+        this.senha = senha;
     }
+    
+    
 
-    public Usuario(String login, String nome, int idade, String senha) {
-        this();
-        this.setIdade(idade);
-        this.setLogin(login);
-        this.setNome(nome);
-        this.setSenha(senha);
-    }
-
+    /**
+     * @return int  A id do Usuario.
+     */
     public int getId_usuario() {
         return id_usuario;
     }
 
     /**
-     * @deprecated - nao eh mais necessario pois a id_usuario passou a ser statica
      * 
      * Metodo privado pois deve ser utilizado somente pelos objetos Usuario e em
      * seu construtor.
      *
-     * @param id_usuario
-     *
+     * @param id_usuario    int que sera usado como o id do usuario
      */
     private void setId_usuario(int id_usuario) {
         this.id_usuario = id_usuario;
     }
 
+    /**
+     * 
+     * @return login    String contendo o login do Usuario
+     */
     public String getLogin() {
         return login;
     }
 
+    /**
+     * 
+     * @param login String
+     */
     public void setLogin(String login) {
         this.login = login;
     }
 
+    /**
+     * 
+     * @return nome String
+     */
     public String getNome() {
         return nome;
     }
@@ -88,8 +101,8 @@ public class Usuario {
      * Configura o nome do usuario e caso o parametro passado seja uma String
      * vazia ele lançara uma IllegalArgumentException
      *
-     * @param nome
-     * @throws IllegalArgumentException
+     * @param nome - String que será utlizada para configurar o nome do Usuario
+     * @throws IllegalArgumentException - caso o parametro seja uma string vazia
      */
     public void setNome(String nome) throws IllegalArgumentException {
         if (nome.equals("")) {
@@ -107,8 +120,8 @@ public class Usuario {
      * Configura a idade de um usuário aceitando apenas numero inteiro e maior
      * que 0
      *
-     * @param idade
-     * @throws IllegalArgumentException
+     * @param idade - int
+     * @throws IllegalArgumentException - caso a idade seja menor do que 1
      */
     public void setIdade(int idade) throws IllegalArgumentException {
         if (idade < 1) {
@@ -118,6 +131,10 @@ public class Usuario {
         }
     }
 
+    /**
+     * 
+     * @return senha    String
+     */
     public String getSenha() {
         return senha;
     }
@@ -126,8 +143,8 @@ public class Usuario {
      * Configura a senha do usuário e caso seja preenchido o campo sem a senha
      * sera lançada a exceção IllegalArgumentException
      *
-     * @param senha
-     * @throws IllegalArgumentException
+     * @param senha - String
+     * @throws IllegalArgumentException - caso a senha seja uma String vazia
      */
     public void setSenha(String senha) throws IllegalArgumentException {
         if (senha.equals("")) {
@@ -144,13 +161,13 @@ public class Usuario {
      * <strong>Idade:</strong> 30 <br>
      * <strong>Login:</strong> meulogin@email.com <br>
      *
-     * @return
+     * @return String -  contendo os dados de um usuario
      */
     @Override
     public String toString() {
-        return "Nome: " + this.getNome() + "\n" 
-                + "Idade: " + this.getIdade()+ "\n" 
-                + "Login: " + this.getLogin() + "\n" ;
+        return "Nome: " + this.getNome() + "\t"
+                + " Idade: " + this.getIdade() + "\t"
+                + " Login: " + this.getLogin() + "\n" ;
     }
 
 }

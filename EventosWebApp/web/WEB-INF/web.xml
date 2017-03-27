@@ -7,6 +7,9 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>ControllerServlet</servlet-name>
+        <url-pattern>/Logar</url-pattern>
+        <url-pattern>/salvarEvento</url-pattern>
+        <url-pattern>/teste</url-pattern>
         <url-pattern>/CadastrarEvento</url-pattern>
         <url-pattern>/Evento</url-pattern>
         <url-pattern>/Home</url-pattern>
@@ -15,7 +18,6 @@
         <url-pattern>/CadastrarUsuario</url-pattern>
         <url-pattern>/Mensagem</url-pattern>
         <url-pattern>/SalvarUsuario</url-pattern>
-        <url-pattern>/Logar</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

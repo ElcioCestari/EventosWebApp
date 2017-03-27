@@ -19,7 +19,7 @@ import model.Usuario;
  * @version 1.0
  * @since 13/mar/2017
  */
-public class UsuarioDAO extends ConnectionFactory implements BaseDAO {
+public class UsuarioDAO extends ConnectionFactory implements InterfaceDAO {
 
     private String sql = null;//sera a variavel que contera as instruções em sql
 
@@ -38,13 +38,13 @@ public class UsuarioDAO extends ConnectionFactory implements BaseDAO {
     /**
      * <p>
      * Recebe um objeto do tipo Usuario configura os seguintes atributos:
-     * <br/>
+     * <br>
      * login, nome, idade e senha
-     * <br/>
+     * <br>
      * E salva-os no banco de dados.
-     * <p/>
+     * <p>
      * @param object - Usuario
-     * @throws Exception
+     * @throws Exception - caso haja algum erro ao salvar no banco
      */
     @Override
     public void create(Object object) throws Exception {
@@ -114,14 +114,14 @@ public class UsuarioDAO extends ConnectionFactory implements BaseDAO {
             throw new Exception(e.getMessage() + " NAO FOI POSSIVEL ENCONTRAR O USUARIO");
         }
         //TODO
-        return new Usuario("", "", id_usuario, id_usuario, "");
+        return null;
     }
 
     /**
      * Faz um select no banco buscando os logins SELECT * FROM usuario WHERE login = (parametro repassado para o metodo)
-     * @param login 
+     * @param login  - String
      * @return - true se encontrou o login e false caso contrario
-     * @throws Exception 
+     * @throws Exception - caso haja algum erro ao realizar a consulta SQL
      */
     public boolean findByLogin(String login) throws Exception {
         this.sql = "SELECT * FROM usuario WHERE login = " + "'" + login + "';";
@@ -137,17 +137,17 @@ public class UsuarioDAO extends ConnectionFactory implements BaseDAO {
     
     /**
      * Verifica se existe o usuario no banco
-     * <p/>
+     * <p>
      * Metodo que verfica se os parametro passados (login e senha)
      * batem com os valores salvos na tabela usuario nos campos login e senha.
      * Caso sejam os mesmos returna true, caso contrario false.
-     * <p/>
+     * <p>
      * Esse metodo é interessando para veriricar se o usuario pode logar.
-     * @param login
-     * @param senha
-     * @return - boolean (true: existe o usuario e confere a senha, false: não confere a senha )
-     * @throws SQLException
-     * @throws Exception 
+     * @param login - String que representa o login do Usuario
+     * @param senha - String que representa a senha do Usuario
+     * @return boolean - true: existe o usuario e confere a senha, false: não confere a senha 
+     * @throws SQLException - caso haja algum erro ao executar alguma instrução SQL
+     * @throws Exception - Caso haja algum erro ao executar alguma instrução SQL
      */
     public boolean verificaAutenticacao(String login, String senha) throws SQLException, Exception {
         

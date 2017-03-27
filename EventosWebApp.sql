@@ -29,9 +29,6 @@ CREATE TABLE local(
 	FOREIGN KEY(id_endereco) REFERENCES endereco(id_endereco)
 );
 
-
--------------------------------------criado ate aqui---------------------------------
-
 CREATE TABLE evento(
 	tipo_evento VARCHAR(256) NOT NULL DEFAULT 'Festa',
 	valor DECIMAL NOT NULL,

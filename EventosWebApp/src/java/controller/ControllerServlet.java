@@ -6,6 +6,8 @@
 package controller;
 
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -46,10 +48,10 @@ public class ControllerServlet extends HttpServlet {
         } else if (request.getRequestURI().endsWith("/Home")) {
             request.setAttribute("tituloDaPagina", "Home");
             jsp = "home.jsp";
-            
-           /*Requisição feita para acessar a JSP EVENTO*/ 
+
+            /*Requisição feita para acessar a JSP EVENTO*/
         } else if (request.getRequestURI().endsWith("/Evento")) {
-            
+
             /*verifica se o usuario tem autorizaocao*/
             if (verificaAutorizacao(request, jsp)) {//se tiver ...
                 request.setAttribute("tituloDaPagina", "Evento");
@@ -59,16 +61,14 @@ public class ControllerServlet extends HttpServlet {
                 request.setAttribute("mensagem", "precisa estar logado");
                 jsp = "mensagem.jsp";
             }//fim do trecho de autorização
-            
-            
-           /*Requisição feita para acessar a JSP LOGIN*/ 
+
+            /*Requisição feita para acessar a JSP LOGIN*/
         } else if (request.getRequestURI().endsWith("/LoginPage")) {
 
             request.setAttribute("tituloDaPagina", "LoginPage");
             jsp = "login.jsp";
-            
-            
-           /*Requisição feita para acessar a JSP CADASTRAR EVENTO*/ 
+
+            /*Requisição feita para acessar a JSP CADASTRAR EVENTO*/
         } else if (request.getRequestURI().endsWith("/CadastrarEvento")) {
 
             /*verifica se o usuario tem autorizacao*/
@@ -81,20 +81,20 @@ public class ControllerServlet extends HttpServlet {
                 jsp = "mensagem.jsp";
             }//fim do trecho de autorização
 
-            /*Requisição feita para acessar a JSP CADASTRAR USUARIO*/ 
+            /*Requisição feita para acessar a JSP CADASTRAR USUARIO*/
         } else if (request.getRequestURI().endsWith("/CadastrarUsuario")) {
-            
+
             request.setAttribute("tituloDaPagina", "CadastrarUsuario");
             jsp = "cadastrar_usuario.jsp";
-            
-        /*Requisição feita para acessar a JSP MENSAGEM*/ 
+
+            /*Requisição feita para acessar a JSP MENSAGEM*/
         } else if (request.getRequestURI().endsWith("/Mensagem")) {
             request.setAttribute("tituloDaPagina", "Mensagem");
             jsp = "mensagem.jsp";
-            
-            /*Requisição feita para acessar a JSP PERFIL*/ 
+
+            /*Requisição feita para acessar a JSP PERFIL*/
         } else if (request.getRequestURI().endsWith("/Perfil")) {//requisição para entrar na pagina de perfil
-            
+
             /*Esse trecho de if else é para verificar se o usuario tem autorização para acessar*/
             if (verificaAutorizacao(request, jsp)) {//se tiver ...
                 request.setAttribute("tituloDaPagina", "Perfil");
@@ -104,28 +104,47 @@ public class ControllerServlet extends HttpServlet {
                 request.setAttribute("mensagem", "precisa estar logado");
                 jsp = "mensagem.jsp";
             }//fim do trecho de autorização
-            
-            /*Requisição feita para SALVAR USUARIO*/ 
+
+            /*Requisição feita para SALVAR USUARIO*/
         } else if (request.getRequestURI().endsWith("/SalvarUsuario")) {
             //requisição para salvar o usuário
 
             try {//tenta salvar um usuario
-                request = new UserController().salvarUsuario(request);
+                request = new UsuarioFacade().salvarUsuario(request);
             } catch (Exception e) {
                 request.setAttribute("mensagem", e.getMessage());
             }
 
             request.setAttribute("tituloDaPagina", "Mensagem");
             jsp = "mensagem.jsp";
-            
-            /*Requisição feita para LOGAR*/ 
+
+            /*Requisição feita para LOGAR*/
         } else if (request.getRequestURI().endsWith("/Logar")) {
-            if (new UserController().logar(request)) {
-            } else {
-                    
+            try {
+                new UsuarioFacade().logar(request);
+                jsp = "perfil.jsp";
+            } catch (Exception ex) {
+                request.setAttribute("mensagem", ex.getMessage());
+                jsp = "mensagem.jsp";
             }
 
-            jsp = "mensagem.jsp";
+            /*Requisição feita na jsp cadastrar_evento.jsp e eh serva para salvar um vento no banco*/
+        } else if (request.getRequestURI().endsWith("/salvarEvento")) {
+
+            try {
+                EventoFacade.criarEvento(request);
+                request.setAttribute("mensagem", "Evento salvo com sucesso!");
+                jsp = "mensagem.jsp";
+            } catch (Exception ex) {
+                request.setAttribute("mensagem", ex.getMessage());
+                jsp = "mensagem.jsp";
+            }
+            /*Requisição feita para LOGAR*/
+        } else if (request.getRequestURI().endsWith("/teste")) {
+
+            //request.getSession().setAttribute("usuario", new UsuarioFacade().getUsuario("elcio@email.com"));
+            //UsuarioFacade.getUsuarioDaSessao(request);
+            jsp = "teste.jsp";
         }
 
         request.getRequestDispatcher(jsp).forward(request, response);
@@ -141,7 +160,7 @@ public class ControllerServlet extends HttpServlet {
      * @param jsp
      */
     private boolean verificaAutorizacao(HttpServletRequest request, String jsp) {
-        if (new UserController().estaLogado(request)) {
+        if (new UsuarioFacade().estaLogado(request)) {
             return true;
         } else {
             jsp = "mensagem.jsp";

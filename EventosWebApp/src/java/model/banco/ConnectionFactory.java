@@ -28,12 +28,13 @@ public class ConnectionFactory {
 
 
     private PreparedStatement statement = null;
+    
     /**
      * Obtem uma conexão com o SGBD
      *
      * @return Conexão com o SGBD
-     * @throws ClassNotFoundException
-     * @throws SQLException
+     * @throws ClassNotFoundException caso não consiga configurar o drive de conexao com o banco
+     * @throws SQLException caso ocorra algum erro em estabelecer uma comunicação com o banco
      */
     public Connection getConnection() throws ClassNotFoundException, SQLException {
 

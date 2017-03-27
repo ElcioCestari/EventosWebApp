@@ -40,7 +40,7 @@
         </header>
 
         <div class="container">
-            <p>${usuario}</p>
+            <p>${usuario.nome}</p>
         </div>
         <footer class="col-md-12">
             <div class="row">
