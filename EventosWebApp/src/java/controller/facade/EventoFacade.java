@@ -19,7 +19,9 @@ import model.entidade.Usuario;
  * @author Elcio Cestari Taira
  */
 public abstract class EventoFacade {
+
     private static ArrayList<Evento> listaDeEventos;
+
     /**
      * Metodo que recebe como parametro um HttpServletRequest CONFIGURADO,ou
      * seja, com os atributos necessarios para criação de um evento conforme foi
@@ -40,39 +42,38 @@ public abstract class EventoFacade {
      * @throws Exception - caso não seja criado um evento
      */
     public static void criarEvento(HttpServletRequest request) throws Exception {
+        try {
+            String nomeEvento = (String) request.getParameter("nomeEvento");
+            String tipo = (String) request.getParameter("tipo_evento");
+            String descricao = (String) request.getParameter("descricao");
+            double valor = Double.parseDouble(request.getParameter("valor"));
+            int faixaEtaria = Integer.parseInt(request.getParameter("faixaEtaria"));
 
-        String nomeEvento = (String) request.getParameter("nomeEvento");
-        String tipo = (String) request.getParameter("tipo_evento");
-        String descricao = (String) request.getParameter("descricao");
-        double valor = Double.parseDouble(request.getParameter("valor"));
-        int faixaEtaria = Integer.parseInt(request.getParameter("faixaEtaria"));
-         
+            Usuario usuario = (Usuario) request.getSession().getAttribute("usuario");
 
-        Usuario usuario = (Usuario) request.getSession().getAttribute("usuario");
-        
-        Evento evento = new Evento(tipo, descricao, valor, faixaEtaria, nomeEvento, usuario.getId_usuario());
+            Evento evento = new Evento(tipo, descricao, valor, faixaEtaria, nomeEvento, usuario.getId_usuario());
 
-        new EventoDAO().create(evento);
-        
-        if(listaDeEventos == null){
-            listaDeEventos = new ArrayList<>();
+            new EventoDAO().create(evento);
+            
+            //estou tendo problemas aqui, pois o listaDeEventos ta null mas não ta entrando no if
+            if (listaDeEventos == null) {
+                listaDeEventos = new ArrayList<>();
+            }
+            listaDeEventos.add(evento);
+
+        } catch (Exception e) {
+            throw new Exception(e.getMessage() + " Houve um erro ao cadastrar o evento. Por favor, tente novamente ou mais tarde!");
         }
-        listaDeEventos.add(evento);
-        String teste;
 
     }
-    
+
     /**
      * retorna uma lista contentdo todos os eventos salvos no sistemas
-     * @return Arraylist    uma lista contendo todos os eventos.
+     *
+     * @return Arraylist uma lista contendo todos os eventos.
      */
     public static ArrayList<Evento> getListaDeEventos() {
         return listaDeEventos;
     }
-    
-    
-    
-    
-    
 
 }
