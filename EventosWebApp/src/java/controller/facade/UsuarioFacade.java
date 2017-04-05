@@ -3,13 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package controller;
+package controller.facade;
 
-import banco.dao.UsuarioDAO;
+import model.banco.dao.UsuarioDAO;
 import java.util.ArrayList;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import model.Usuario;
+import model.entidade.Usuario;
 
 /**
  * Classe utilizada para fazer o controle dos usuarios

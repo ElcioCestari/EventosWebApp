@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package banco.dao;
+package model.banco.dao;
 
 /**
  * Interface que serve como base para as outras classes que implementam os metodos para realizar as operações no banco de dados 

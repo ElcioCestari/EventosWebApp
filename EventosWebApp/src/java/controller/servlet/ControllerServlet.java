@@ -3,11 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package controller;
+package controller.servlet;
 
+import controller.facade.EventoFacade;
+import controller.facade.UsuarioFacade;
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -43,10 +43,15 @@ public class ControllerServlet extends HttpServlet {
 
         if (request.getRequestURI().endsWith("/index")) {//faz o redirecionamento para a home, com os dados carregados
             request.setAttribute("tituloDaPagina", "Home");
+            
+            request.setAttribute("listaDeEventos", EventoFacade.getListaDeEventos());
+            
             jsp = "home.jsp";
 
         } else if (request.getRequestURI().endsWith("/Home")) {
             request.setAttribute("tituloDaPagina", "Home");
+            
+            request.setAttribute("listaDeEventos", EventoFacade.getListaDeEventos());
             jsp = "home.jsp";
 
             /*Requisição feita para acessar a JSP EVENTO*/
@@ -136,7 +141,7 @@ public class ControllerServlet extends HttpServlet {
                 request.setAttribute("mensagem", "Evento salvo com sucesso!");
                 jsp = "mensagem.jsp";
             } catch (Exception ex) {
-                request.setAttribute("mensagem", ex.getMessage());
+                    request.setAttribute("mensagem", ex.getMessage());
                 jsp = "mensagem.jsp";
             }
             /*Requisição feita para LOGAR*/

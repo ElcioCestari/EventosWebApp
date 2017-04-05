@@ -3,11 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package banco.dao;
+package model.banco.dao;
 
 import banco.ConnectionFactory;
 import java.sql.PreparedStatement;
-import model.Evento;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import model.entidade.Evento;
 
 /**
  * Essa classe implementa os metodos de consultas e inserções no Banco de Dados
@@ -18,6 +21,7 @@ import model.Evento;
  */
 public class EventoDAO extends ConnectionFactory implements InterfaceDAO<Object> {
 
+    
     /**
      * Metodo que recebe um Object que deve ser uma instancia de Evento pois
      * sera feito o casting nesse metodo. E salva-o no banco na tabela evento
@@ -30,7 +34,7 @@ public class EventoDAO extends ConnectionFactory implements InterfaceDAO<Object>
         try {
             Evento evento = (Evento) t;//fazendo casting
 
-            String sql = "INSERT INTO evento(tipo_evento,valor,nome,id_evento,faixaEtaria)Values(?,?,?,?,?);";
+            String sql = "INSERT INTO evento(tipo_evento,valor,nome,id_evento,faixaEtaria, id_usuario)Values(?,?,?,?,?,?);";
 
             PreparedStatement statement = getConnection().prepareStatement(sql);
 
@@ -39,7 +43,7 @@ public class EventoDAO extends ConnectionFactory implements InterfaceDAO<Object>
             statement.setString(3, evento.getNome());//valor que será salvo na coluna nome
             statement.setInt(4, evento.getId_evento());//valor que será salvo na coluna id_evento. Essa coluna é uma PRIMARY KEY
             statement.setInt(5, evento.getFaixaEtaria());//valor que será salvo na coluna faixa_etaria.
-
+            statement.setInt(6, evento.getId_usuario());//valor que sera salvo como id_usuario.  CHAVE ESTRANGEIRA
             statement.execute();//executando a instrução SQL.
             
         } catch (Exception e) {

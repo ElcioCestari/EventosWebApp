@@ -3,13 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package banco.dao;
+package model.banco.dao;
 
 import banco.ConnectionFactory;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import model.Usuario;
+import model.entidade.Usuario;
 
 /**
  * Classe que realiza as operações no banco de dados, tais como: create, 

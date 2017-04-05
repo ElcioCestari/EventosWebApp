@@ -3,13 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package controller;
+package controller.facade;
 
-import banco.dao.EventoDAO;
+import java.util.ArrayList;
+import model.banco.dao.EventoDAO;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-import model.Evento;
-import model.Usuario;
+import model.entidade.Evento;
+import model.entidade.Usuario;
 
 /**
  * Essa classe prove uma abstração maior para poder acessar os recursos que são
@@ -19,7 +19,7 @@ import model.Usuario;
  * @author Elcio Cestari Taira
  */
 public abstract class EventoFacade {
-
+    private static ArrayList<Evento> listaDeEventos;
     /**
      * Metodo que recebe como parametro um HttpServletRequest CONFIGURADO,ou
      * seja, com os atributos necessarios para criação de um evento conforme foi
@@ -53,6 +53,26 @@ public abstract class EventoFacade {
         Evento evento = new Evento(tipo, descricao, valor, faixaEtaria, nomeEvento, usuario.getId_usuario());
 
         new EventoDAO().create(evento);
+        
+        if(listaDeEventos == null){
+            listaDeEventos = new ArrayList<>();
+        }
+        listaDeEventos.add(evento);
+        String teste;
 
     }
+    
+    /**
+     * retorna uma lista contentdo todos os eventos salvos no sistemas
+     * @return Arraylist    uma lista contendo todos os eventos.
+     */
+    public static ArrayList<Evento> getListaDeEventos() {
+        return listaDeEventos;
+    }
+    
+    
+    
+    
+    
+
 }

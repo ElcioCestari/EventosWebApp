@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package model;
+package model.entidade;
 
 /**
  * Essa classe modela os metodos e atributos que um evento deve possuir
