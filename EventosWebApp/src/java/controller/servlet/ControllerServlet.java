@@ -57,7 +57,7 @@ public class ControllerServlet extends HttpServlet {
                 jsp = "evento.jsp";
 
             } else if (request.getRequestURI().endsWith("/LoginPage")) {//Requisição feita para acessar a JSP LOGIN
-                request.setAttribute("tituloDaPagina", "LoginPage");
+                request.setAttribute("tituloDaPagina", "Login");
                 jsp = "login.jsp";
 
             } else if (request.getRequestURI().endsWith("/CadastrarEvento")) {//Requisição feita para acessar a JSP CADASTRAR EVENTO
@@ -66,7 +66,7 @@ public class ControllerServlet extends HttpServlet {
                 jsp = "cadastrar_evento.jsp";
 
             } else if (request.getRequestURI().endsWith("/CadastrarUsuario")) {//Requisição feita para acessar a JSP CADASTRAR USUARIO
-                request.setAttribute("tituloDaPagina", "CadastrarUsuario");
+                request.setAttribute("tituloDaPagina", "Novo Usuario");
                 jsp = "cadastrar_usuario.jsp";
 
             } else if (request.getRequestURI().endsWith("/Mensagem")) {//Requisição feita para acessar a JSP MENSAGEM
@@ -93,7 +93,11 @@ public class ControllerServlet extends HttpServlet {
                 request.setAttribute("mensagem", "Evento salvo com sucesso!");
                 jsp = "mensagem.jsp";
 
-            } else if (request.getRequestURI().endsWith("/teste")) {//APENAS PARA TESTAR 
+            } else if (request.getRequestURI().endsWith("/Sair")) {//Requisição para que o usuario deslogue
+                UsuarioFacade.logout(request);//desloga o usuario da sessao
+                jsp = "home.jsp";//direciona para a home
+                
+            }else if (request.getRequestURI().endsWith("/teste")) {//APENAS PARA TESTAR 
                 //request.getSession().setAttribute("usuario", new UsuarioFacade().getUsuario("elcio@email.com"));
                 //UsuarioFacade.getUsuarioDaSessao(request);
                 jsp = "teste.jsp";

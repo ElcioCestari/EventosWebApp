@@ -7,30 +7,29 @@ package model.banco.dao;
 
 import banco.ConnectionFactory;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import model.entidade.Evento;
 
 /**
  * Essa classe implementa os metodos de consultas e inserções no Banco de Dados
  *
- * @author Elcio Cestari Taira
- * @version 1.0
- * @since 26/mar/2017
+ * @author      Elcio Cestari Taira
+ * @version     1.0
+ * @since       26/mar/2017
  */
 public class EventoDAO extends ConnectionFactory implements InterfaceDAO<Object> {
 
     
     /**
-     * Metodo que recebe um Object que deve ser uma instancia de Evento pois
+     * Metodo que recebe um Object que deve ser uma instancia de Evento, pois
      * sera feito o casting nesse metodo. E salva-o no banco na tabela evento
      *
-     * @param t - Objeto que deve ser do tipo Evento
-     * @throws Exception - caso o parametro não seja do tipo Evento
+     * @param t                         Objeto que deve ser do tipo Evento
+     * @throws SQLException             Caso haja algum erro ao tentar acessar ou salvar no banco
+     * @throws ClassNotFoundException   Caso haja algum erro em instanciar a o tipo da classe
      */
     @Override
-    public void create(Object t) throws Exception {
+    public void create(Object t) throws SQLException, ClassNotFoundException {
         try {
             Evento evento = (Evento) t;//fazendo casting
 
@@ -46,8 +45,10 @@ public class EventoDAO extends ConnectionFactory implements InterfaceDAO<Object>
             statement.setInt(6, evento.getId_usuario());//valor que sera salvo como id_usuario.  CHAVE ESTRANGEIRA
             statement.execute();//executando a instrução SQL.
             
-        } catch (Exception e) {
-            throw new Exception(e.getMessage() + " Houve um erro ao salvar o Evento");
+        } catch (SQLException sqle) {
+            throw new SQLException(sqle.getMessage() + " Houve um erro ao salvar o Evento");
+        } catch (ClassNotFoundException cnfe) {
+            throw new ClassNotFoundException(cnfe.getMessage() + " Houve um erro ao salvar o Evento");
         }
     }
 

@@ -9,10 +9,12 @@ import banco.ConnectionFactory;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import model.entidade.Usuario;
 
 /**
- * Classe que realiza as operações no banco de dados, tais como: create, 
+ * Classe que realiza as operações no banco de dados, tais como: create,
  * findByLogin e verificaAutenticacao
  *
  * @author Elcio Cestari Taira
@@ -33,8 +35,6 @@ public class UsuarioDAO extends ConnectionFactory implements InterfaceDAO {
         super();
     }
 
-    
-    
     /**
      * <p>
      * Recebe um objeto do tipo Usuario configura os seguintes atributos:
@@ -70,7 +70,7 @@ public class UsuarioDAO extends ConnectionFactory implements InterfaceDAO {
         } catch (SQLException e) {
             throw new Exception("Erro ao configurar os parametros do usuario: " + e.getMessage());
         }
-        
+
         try {
             statement.execute();//executa o sql no banco
         } catch (SQLException e) {
@@ -99,18 +99,16 @@ public class UsuarioDAO extends ConnectionFactory implements InterfaceDAO {
 
         try {
             statement = getConnection().prepareStatement(sql);//estabelece conexão com o banco e prepara o sql
-        } catch (ClassNotFoundException ex) {
+        } catch (ClassNotFoundException | SQLException ex) {
             throw new Exception("ERRO AO ESTABELECER UMA CONEXAO: " + ex.getMessage());
-        } catch (SQLException e) {
-            throw new Exception("ERRO AO ESTABELECER UMA CONEXAO: " + e.getMessage());
         }
-        
+
         try {
             resultado = statement.executeQuery();
-            while(resultado.next()){
+            while (resultado.next()) {
                 nome = resultado.getString("nome");
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             throw new Exception(e.getMessage() + " NAO FOI POSSIVEL ENCONTRAR O USUARIO");
         }
         //TODO
@@ -118,51 +116,67 @@ public class UsuarioDAO extends ConnectionFactory implements InterfaceDAO {
     }
 
     /**
-     * Faz um select no banco buscando os logins SELECT * FROM usuario WHERE login = (parametro repassado para o metodo)
-     * @param login  - String
-     * @return - true se encontrou o login e false caso contrario
-     * @throws Exception - caso haja algum erro ao realizar a consulta SQL
+     * Faz um select no banco buscando os logins: SELECT * FROM usuario WHERE
+     * login = (parametro repassado para o metodo)
+     *
+     * @param login String que deve ser no modelo de um email
+     * @return true se encontrou o login e false caso contrario
+     * @throws RuntimeException caso haja algum erro ao realizar a consulta SQL
      */
-    public boolean findByLogin(String login) throws Exception {
+    public boolean findByLogin(String login) throws RuntimeException {
         this.sql = "SELECT * FROM usuario WHERE login = " + "'" + login + "';";
-        statement = getConnection().prepareStatement(sql);
-        resultado = statement.executeQuery();
-        while(resultado.next()){
-            if(resultado.getString("login").equals(login))
-                return true;
+        try {
+            statement = getConnection().prepareStatement(sql);
+            resultado = statement.executeQuery();
+            while (resultado.next()) {
+                if (resultado.getString("login").equals(login)) {
+                    return true;
+                }
+            }
+        } catch (ClassNotFoundException | SQLException ex) {
+            throw new RuntimeException("Houve um problema ao verificar o login: " + ex.getMessage());
+        } finally {
+            try {
+                statement.close();
+                resultado.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(UsuarioDAO.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         return false;
     }
-    
-    
+
     /**
      * Verifica se existe o usuario no banco
      * <p>
-     * Metodo que verfica se os parametro passados (login e senha)
-     * batem com os valores salvos na tabela usuario nos campos login e senha.
-     * Caso sejam os mesmos returna true, caso contrario false.
+     * Metodo que verfica se os parametro passados (login e senha) batem com os
+     * valores salvos na tabela usuario nos campos login e senha. Caso sejam os
+     * mesmos returna true, caso contrario false.
      * <p>
      * Esse metodo é interessando para veriricar se o usuario pode logar.
+     *
      * @param login - String que representa o login do Usuario
      * @param senha - String que representa a senha do Usuario
-     * @return boolean - true: existe o usuario e confere a senha, false: não confere a senha 
-     * @throws SQLException - caso haja algum erro ao executar alguma instrução SQL
+     * @return boolean - true: existe o usuario e confere a senha, false: não
+     * confere a senha
+     * @throws SQLException - caso haja algum erro ao executar alguma instrução
+     * SQL
      * @throws Exception - Caso haja algum erro ao executar alguma instrução SQL
      */
     public boolean verificaAutenticacao(String login, String senha) throws SQLException, Exception {
-        
+
         //SELECT * FROM usuario WHERE login = 'elcio@email.com' AND senha = 123;
         //instrução SQL q sera executada no banco
         //deve percorrer todas as tuplas da tabela usuario
         //e retornar a row com usuario e sinha igual aos repassados no paratro do metodo
-        this.sql = "SELECT * FROM usuario WHERE login = " + "'" + login + "'" 
-                                        + "AND senha = " + "'" + senha + "';";
-        
+        this.sql = "SELECT * FROM usuario WHERE login = " + "'" + login + "'"
+                + "AND senha = " + "'" + senha + "';";
+
         statement = getConnection().prepareStatement(sql);
         resultado = statement.executeQuery();
-        
-        while(resultado.next()){
-            if(resultado.getString("senha").equals(senha) && resultado.getString("login").equals(login) ){
+
+        while (resultado.next()) {
+            if (resultado.getString("senha").equals(senha) && resultado.getString("login").equals(login)) {
                 return true;
             }
         }

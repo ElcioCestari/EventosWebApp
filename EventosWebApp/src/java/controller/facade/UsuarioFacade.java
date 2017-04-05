@@ -38,11 +38,11 @@ public class UsuarioFacade {
      */
     public UsuarioFacade() {
         if (listaDeUsuarios == null) {
-            listaDeUsuarios = new ArrayList<Usuario>();
+            listaDeUsuarios = new ArrayList<>();
         }
-        if(id_usuario == null){
+        if (id_usuario == null) {
             id_usuario = 1;
-        } 
+        }
     }
 
     /**
@@ -104,17 +104,14 @@ public class UsuarioFacade {
      * @throws Exception - caso não seja possível fazer o login
      */
     public boolean logar(HttpServletRequest request) throws Exception {
-
-        String login = null;
-        String senha = null;
-        login = (String) request.getParameter("login");
-        senha = (String) request.getParameter("senha");
+        String login = (String) request.getParameter("login");
+        String senha = (String) request.getParameter("senha");
 
         try {
             if (new UsuarioDAO().verificaAutenticacao(login, senha)) {//Se o login e senha digitados pelo usuario baterem...
                 request.getSession().invalidate();//finalizando a sessão por questões de segurança
                 HttpSession session = request.getSession(true);//criando uma sessao
-                session.setAttribute("autorizacao", new Boolean(true));//Autorizando o usuario na sessao
+                session.setAttribute("autorizacao", true);//Autorizando o usuario na sessao
                 session.setAttribute("usuario", getUsuario(login));//colocando um usuario na sessao
 
                 request.setAttribute("mensagem", "Logado com sucesso");
@@ -164,7 +161,7 @@ public class UsuarioFacade {
             mensagem = e.getMessage();//APENAS PARA DEBUG
         } finally {
             request.setAttribute("mensagem", mensagem);//seta a 'mensagem' do request
-        };
+        }
         return request;//request para ser utilizado no servlet
     }
 
@@ -178,12 +175,18 @@ public class UsuarioFacade {
      * @see  <code>logar()</code>
      */
     public static boolean estaLogado(HttpServletRequest request) {
-
         if (request.getSession().getAttribute("autorizacao") == null
                 || request.getSession().getAttribute("autorizacao").equals(false)) {
-
             return false;
         }
         return true;
+    }
+    
+    /**
+     * Desloga o usuario da sessao, invalidando a sessao
+     * @param request HttpServletRequest de sera capturado a sessao
+     */
+    public static void logout(HttpServletRequest request) {
+        request.getSession().invalidate();
     }
 }

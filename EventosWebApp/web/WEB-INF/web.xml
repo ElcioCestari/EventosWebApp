@@ -18,6 +18,7 @@
         <url-pattern>/CadastrarUsuario</url-pattern>
         <url-pattern>/Mensagem</url-pattern>
         <url-pattern>/SalvarUsuario</url-pattern>
+        <url-pattern>/Sair</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
