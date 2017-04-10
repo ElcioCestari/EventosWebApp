@@ -5,7 +5,7 @@
  */
 package model.banco.dao;
 
-import banco.ConnectionFactory;
+import model.banco.ConnectionFactory;
 
 /**
  *

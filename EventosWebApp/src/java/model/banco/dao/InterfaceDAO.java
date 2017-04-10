@@ -10,6 +10,7 @@ package model.banco.dao;
  * @author Elcio Cestari Taira
  */
 interface InterfaceDAO<T> {
+    
     /**
      * Deve ser utilizada para salvar um objeto
      * @param t um objeto do tipo da Classe

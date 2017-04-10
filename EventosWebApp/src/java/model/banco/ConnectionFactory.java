@@ -3,12 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package banco;
+package model.banco;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
@@ -47,5 +46,15 @@ public class ConnectionFactory {
             new ClassNotFoundException("Não foi possivel registrar o driver jdbc do mysql");
         }
         return null;
+    }
+    
+    /**
+     * finaliza a conexão com o banco.
+     * @throws ClassNotFoundException   gera quando a classe não foi encontrada.
+     * @throws SQLException caso  haja algum erro de com o banco.
+     * @see ConnectionFactory   Veja o atributo <code>driver</code> na classe <code>ConnectionFactory</code> em <code>model.banco</code> 
+     */
+    public void close() throws ClassNotFoundException, SQLException{
+        this.getConnection().close();
     }
 }

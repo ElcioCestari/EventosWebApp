@@ -5,6 +5,7 @@
  */
 package controller.servlet;
 
+import controller.facade.EnderecoFacade;
 import controller.facade.EventoFacade;
 import controller.facade.UsuarioFacade;
 import java.io.IOException;
@@ -88,8 +89,8 @@ public class ControllerServlet extends HttpServlet {
                 jsp = "perfil.jsp";
 
             } else if (request.getRequestURI().endsWith("/salvarEvento")) {//Requisição feita na jsp cadastrar_evento.jsp e eh serva para salvar um vento no banco
-                verificaAutorizacao(request);
-                EventoFacade.criarEvento(request);
+                verificaAutorizacao(request);//verifica autorização
+                EventoFacade.criarEvento(request);//cria um evento
                 request.setAttribute("mensagem", "Evento salvo com sucesso!");
                 jsp = "mensagem.jsp";
 
@@ -98,8 +99,10 @@ public class ControllerServlet extends HttpServlet {
                 jsp = "home.jsp";//direciona para a home
                 
             }else if (request.getRequestURI().endsWith("/teste")) {//APENAS PARA TESTAR 
-                //request.getSession().setAttribute("usuario", new UsuarioFacade().getUsuario("elcio@email.com"));
-                //UsuarioFacade.getUsuarioDaSessao(request);
+                EnderecoFacade enderecoFacade = new EnderecoFacade();
+                enderecoFacade.criaEndereco(request);
+                enderecoFacade.configuraAtributoEnderecoDoRequest(request);
+                
                 jsp = "teste.jsp";
             }
         } catch (Exception e) {//caso aja algum erro durante alguma execução, aqui sera capturado e exibida a JSP mensagem com a mesagem de erro

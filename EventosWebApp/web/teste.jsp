@@ -8,17 +8,9 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <link rel="stylesheet" type="text/css" href="css_principal.css">
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-        <title>Teste</title>
+        <%@include file="head/head.jsp" %>
     </head>
     <body>
-        <%@include file="nav.jsp"%>
-        <footer>
-            <%@include file="footer.jsp"%>
-        </footer>
+        <p>${endereco}</p>
     </body>
 </html>

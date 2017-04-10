@@ -43,13 +43,15 @@ public abstract class EventoFacade {
      */
     public static void criarEvento(HttpServletRequest request) throws Exception {
         try {
-            String nomeEvento = (String) request.getParameter("nomeEvento");
-            String tipo = (String) request.getParameter("tipo_evento");
-            String descricao = (String) request.getParameter("descricao");
-            double valor = Double.parseDouble(request.getParameter("valor"));
-            int faixaEtaria = Integer.parseInt(request.getParameter("faixaEtaria"));
+            new EnderecoFacade().criaEndereco(request);
+                    
+            String nomeEvento = (String) request.getParameter("nomeEvento");//Fazendo casting. throw ClassCastException 
+            String tipo = (String) request.getParameter("tipo_evento");//Fazendo casting. throw ClassCastException
+            String descricao = (String) request.getParameter("descricao");//Fazendo casting. throw ClassCastException
+            double valor = Double.parseDouble(request.getParameter("valor"));//Fazendo casting. throw ClassCastException
+            int faixaEtaria = Integer.parseInt(request.getParameter("faixaEtaria"));//Fazendo casting. throw ClassCastException
 
-            Usuario usuario = (Usuario) request.getSession().getAttribute("usuario");
+            Usuario usuario = (Usuario) request.getSession().getAttribute("usuario");//problema esta aqui
 
             Evento evento = new Evento(tipo, descricao, valor, faixaEtaria, nomeEvento, usuario.getId_usuario());
 
@@ -61,6 +63,8 @@ public abstract class EventoFacade {
             }
             listaDeEventos.add(evento);
 
+        } catch(ClassCastException e){
+            throw new RuntimeException("Ocorreu um erro de sistema: "  + e.getMessage() + " Por favor tente novamente!");
         } catch (Exception e) {
             throw new Exception(e.getMessage() + " Houve um erro ao cadastrar o evento. Por favor, tente novamente ou mais tarde!");
         }

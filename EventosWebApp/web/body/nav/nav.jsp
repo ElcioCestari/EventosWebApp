@@ -29,6 +29,6 @@ ${tituloDaPagina}
                 <li class="${class_active_usuario}"><a href="${pageContext.request.contextPath}/CadastrarUsuario"><span class="glyphicon glyphicon-user"></span> Criar Conta</a></li>
                 <li class="${class_active_login}"><a href="${pageContext.request.contextPath}/LoginPage"><span class="glyphicon glyphicon-log-in"></span> Fazer login</a></li>
                 </c:otherwise>    
-            </c:choose>
+        </c:choose>
     </ul>
 </div>

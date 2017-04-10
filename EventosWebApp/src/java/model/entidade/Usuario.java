@@ -112,6 +112,10 @@ public class Usuario {
         }
     }
 
+    /**
+     * 
+     * @return int  contendo a idade do usuario
+     */
     public int getIdade() {
         return idade;
     }

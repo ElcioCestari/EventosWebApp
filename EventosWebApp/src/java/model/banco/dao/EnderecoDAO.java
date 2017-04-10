@@ -5,18 +5,46 @@
  */
 package model.banco.dao;
 
-import banco.ConnectionFactory;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import model.banco.ConnectionFactory;
+import model.entidade.Endereco;
 
 /**
  *
  * @author Elcio Cestari Taira
  */
-public class EnderecoDAO extends ConnectionFactory implements InterfaceDAO{
+public class EnderecoDAO extends ConnectionFactory implements InterfaceDAO {
+
+    private PreparedStatement statement;//Prepara a instrução SQL que sera executa
+    private ResultSet resultSet;//Contém uma tabela com todas as rows do SQL executado
+    private String sql;//String que armezenara temporariamente as instruções SQL que deverão ser executadas
 
     @Override
     public void create(Object t) throws Exception {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+        try {
+            Endereco endereco = (Endereco) t;//fazendo casting. throw ClassCastException
+            
+            this.sql = "INSERT INTO endereco" + "(rua,numero,bairro,cidade,estado)"
+                    + "VALUES(?,?,?,?,?);";//preparando a query 
+            
+            statement = super.getConnection().prepareStatement(sql);//preparando a query que será executada
+
+            statement.setString(1, endereco.getRua());
+            statement.setInt(2, endereco.getNumero());
+            statement.setString(3, endereco.getBairro());
+            statement.setString(4, endereco.getCidade());
+            statement.setString(5, endereco.getEstado());
+            statement.execute();
+            
+        } catch (ClassCastException e) {
+            throw new RuntimeException("Ocorreu um erro: " + e.getMessage());
+        } catch (SQLException e) {
+            throw new RuntimeException("Houve um erro na preparaçao da instrução do banco de dados: " + e.getMessage());
+        }
+
+    }//fim do método create
 
     @Override
     public void delete() {
@@ -32,5 +60,5 @@ public class EnderecoDAO extends ConnectionFactory implements InterfaceDAO{
     public Object findById(int id) throws Exception {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    
+
 }

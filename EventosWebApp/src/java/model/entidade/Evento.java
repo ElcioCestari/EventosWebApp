@@ -100,7 +100,7 @@ public class Evento {
     /**
      * Configura a faixa etaria
      * 
-     * @param faixaEtaria   int
+     * @param faixaEtaria   <code>int</code>
      * @throws IllegalArgumentException Caso a idade seja um valor invalido
      */
     public void setFaixaEtaria(int faixaEtaria) throws IllegalArgumentException{
@@ -111,8 +111,8 @@ public class Evento {
     }
 
     /**
-     * Retorna o id do Evento
-     * @return id_evento    int
+     * Retorna o id do <code>Evento</code>
+     * @return id_evento    Um <code>int</code> que representa o id do <code>Evento</code>
      */
     public int getId_evento() {
         return id_evento;
@@ -121,7 +121,7 @@ public class Evento {
     /**
      * Configura o id do evento
      * 
-     * @param id_evento int
+     * @param id_evento Um <code>int</code> que representa o id do <code>Evento</code>
      * @throws IllegalArgumentException caso o id seja menor do que 1
      */
     private void setId_evento(int id_evento) throws IllegalArgumentException{
@@ -134,7 +134,7 @@ public class Evento {
     /**
      * Retorna o tipo do Evento.
      * 
-     * @return
+     * @return  <code>String</code> que é o tipo do evento. Exemplo: festa
      */
     public String getTipo() {
         return tipo;
@@ -143,7 +143,7 @@ public class Evento {
     /**
      * Configura o tipo de um evento
      * 
-     * @param tipo
+     * @param tipo  <code>String</code> que deve ser o tipo que sera o Evento. Exemplo: festa
      * @throws IllegalArgumentException se o tipo for vazio ou nulo
      */
     public void setTipo(String tipo) throws IllegalArgumentException{
@@ -156,7 +156,7 @@ public class Evento {
     /**
      * Retorna a descrição do Evento
      * 
-     * @return
+     * @return <code>String</code> descrição do evento.
      */
     public String getDescricao() {
         return descricao;
@@ -165,7 +165,7 @@ public class Evento {
     /**
      * Configura a descrição de um Evento
      * 
-     * @param descricao
+     * @param descricao Uma <code>String</code> que contém a descrição do <code>Evento</code>
      */
     public void setDescricao(String descricao) {
         this.descricao = descricao;
@@ -174,7 +174,7 @@ public class Evento {
     /**
      * Retorna o valor de um evento
      * 
-     * @return 
+     * @return <code>double</code> o valor do <code>Evento</code>
      */
     public double getValor() {
         return valor;
@@ -183,7 +183,7 @@ public class Evento {
     /**
      * Configura o valor de um evento.
      * 
-     * @param valor double
+     * @param valor <code>double</code>
      * @throws IllegalArgumentException caso o valor seja negativo.
      */
     public void setValor(double valor) throws IllegalArgumentException{
@@ -194,8 +194,8 @@ public class Evento {
     }
 
     /**
-     * retorna o nome do Evento
-     * @return nome String
+     * retorna o nome do <code>Evento</code>
+     * @return nome <code>String</code>
      */
     public String getNome() {
         return nome;
@@ -225,7 +225,7 @@ public class Evento {
     /**
      * Configura o id de um usuario
      * 
-     * @param id_usuario    int
+     * @param id_usuario    <code>int</code>
      * @throws IllegalArgumentException Lança essa exceção caso o parametro seja um numero menor do que 1
      */
     public void setId_usuario(int id_usuario) throws IllegalArgumentException{

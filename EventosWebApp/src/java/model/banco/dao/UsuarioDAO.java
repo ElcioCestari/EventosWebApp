@@ -5,7 +5,7 @@
  */
 package model.banco.dao;
 
-import banco.ConnectionFactory;
+import model.banco.ConnectionFactory;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
