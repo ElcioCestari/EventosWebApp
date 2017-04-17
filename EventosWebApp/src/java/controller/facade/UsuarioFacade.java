@@ -20,7 +20,7 @@ import model.entidade.Usuario;
  */
 public class UsuarioFacade {
 
-    /*
+    /**
      *id_usuario é uma variavel que será utilizada para setar o id_usuario no model Usuario.
      *Fiz a declaração desse método aqui pois não estava conseguindo acessar o atributo id_usuario
      *através do método get em um objeto Usuario salvo na sessao (HttpSession) ao contrario dos outros atributos.
@@ -141,7 +141,7 @@ public class UsuarioFacade {
         String senha = (String) request.getParameter("senha");//fazendo casting para atribuir os valores aos respectivos atributos
         int idade = Integer.parseInt(request.getParameter("idade"));//fazendo casting para atribuir os valores aos respectivos atributos
         String login = (String) request.getParameter("login");//fazendo casting para atribuir os valores aos respectivos atributos
-
+        int id_usuario = new UsuarioDAO().getLastLogin() + 1;//recupera o maior id do usuario salvo no banco e soma 1 para ser inserido um numero diferente no banco
         try {
 
             boolean b = new UsuarioDAO().findByLogin(login);//verifica se existe o login 
@@ -150,14 +150,12 @@ public class UsuarioFacade {
                 throw new IllegalArgumentException(mensagem);
             }
 
-            /*lembrar que o id_usuario deve ser sempre incrementado*/
-            usuario = new Usuario(login, nome, idade, id_usuario++, senha);
+            usuario = new Usuario(login, nome, idade, id_usuario, senha);
             new UsuarioDAO().create(usuario);
             listaDeUsuarios.add(usuario);//adiciona um novo usuario a listadeUsuarios
-            logar(request);//
+            logar(request);//faz o login, o que inclui um usuario na sessão
             mensagem = "Dados salvo com sucesso!";//mensagem positiva
         } catch (Exception e) {
-            //mensagem = "Desculpe ocorreu um erro ao salvar os seus dados!";//mensagem que não conseguiu salvar
             mensagem = e.getMessage();//APENAS PARA DEBUG
         } finally {
             request.setAttribute("mensagem", mensagem);//seta a 'mensagem' do request

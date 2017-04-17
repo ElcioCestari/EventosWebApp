@@ -68,7 +68,8 @@ ADD id_usuario MEDIUMINT;
 ALTER TABLE evento
 ADD CONSTRAINT FOREIGN KEY(id_usuario) REFERENCES usuario(id_usuario);
 
-
+ALTER TABLE evento
+ADD descricao VARCHAR(256) DEFAULT '';
 
 
 

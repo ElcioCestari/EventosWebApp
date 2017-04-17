@@ -182,4 +182,32 @@ public class UsuarioDAO extends ConnectionFactory implements InterfaceDAO {
         }
         return false;
     }
+
+    /**
+     * Recupera o maior id do usuario que esta salvo no banco
+     * @return int  que corresponde ao maior id do usuario
+     * @throws RuntimeException caso ocorra um erro de SQL OU CLASS
+     */
+    public int getLastLogin() throws RuntimeException{
+        int lastLogin = 0;// utlizada para armazenar temporariamente o maior inteiro da tabela usuario da coluna id_usuario
+        try {
+            this.sql = "SELECT MAX(id_usuario) as max_id_usuario FROM usuario;";//instrução SQL que recupera o maior id_usuario. tive que criar a aliase max_id_usuario pois sem estava dando erro
+            statement = getConnection().prepareStatement(sql);//prepara a query
+            resultado = statement.executeQuery();//executa a query
+            while(resultado.next()){//loop que deve rodar apenas 1 vez devido a instrução SQL
+                lastLogin = resultado.getInt("max_id_usuario");//atribui a variavel o resultado da query;
+            }
+        } catch (SQLException | ClassNotFoundException e) {
+            throw new RuntimeException("Não foi possivel recuperar o ultimo id do usuario: " + e.getMessage());
+        } finally{//trecho para liberar recursos
+            try {
+                statement.close();
+                resultado.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(UsuarioDAO.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return lastLogin;//retorna o maior id_usuario do banco
+    }
 }
+

@@ -15,6 +15,9 @@ public class Local {
     private String nome;
     private static int id_local;
     private int capacidade;
+    private int id_endereco;
+    
+    
 
     public Local() throws IllegalArgumentException{
         if(id_local == 0)  setId_local(1);

@@ -49,7 +49,7 @@ public class ControllerServlet extends HttpServlet {
 
             } else if (request.getRequestURI().endsWith("/Home")) {//Requisição feita para acessar a JSP home
                 request.setAttribute("tituloDaPagina", "Home");
-                request.setAttribute("listaDeEventos", EventoFacade.getListaDeEventos());
+                request.setAttribute("listaDeEventos", new EventoFacade().getListaDeEventos());
                 jsp = "home.jsp";
 
             } else if (request.getRequestURI().endsWith("/Evento")) {//Requisição feita para acessar a JSP EVENTO
@@ -90,7 +90,7 @@ public class ControllerServlet extends HttpServlet {
 
             } else if (request.getRequestURI().endsWith("/salvarEvento")) {//Requisição feita na jsp cadastrar_evento.jsp e eh serva para salvar um vento no banco
                 verificaAutorizacao(request);//verifica autorização
-                EventoFacade.criarEvento(request);//cria um evento
+                new EventoFacade().criarEvento(request);//cria um evento
                 request.setAttribute("mensagem", "Evento salvo com sucesso!");
                 jsp = "mensagem.jsp";
 

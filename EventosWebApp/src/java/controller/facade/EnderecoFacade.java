@@ -5,6 +5,7 @@
  */
 package controller.facade;
 
+import java.util.ArrayList;
 import javax.servlet.http.HttpServletRequest;
 import model.banco.dao.EnderecoDAO;
 import model.entidade.Endereco;
@@ -19,6 +20,7 @@ import model.entidade.Endereco;
 public class EnderecoFacade {
 
     private Endereco endereco;
+    private static ArrayList<Endereco> listaDeEndereco;
 
     /**
      * Metodo que abstrai os processos para criação de um endero e salvamento de
@@ -31,6 +33,7 @@ public class EnderecoFacade {
      */
     public void criaEndereco(HttpServletRequest request) throws Exception {
         try {
+            
             int numero = Integer.parseInt(request.getParameter("numero"));//fazendo castingo. pode lançar ClassCastException 
             String rua = (String) request.getParameter("rua"); //fazendo castingo. pode lançar ClassCastException
             String bairro = (String) request.getParameter("bairro"); //fazendo castingo. pode lançar ClassCastException
@@ -39,6 +42,14 @@ public class EnderecoFacade {
 
             endereco = new Endereco(numero, rua, bairro, cidade, estado);//instanciando objeto. pode lançar illegalARgumentException
             new EnderecoDAO().create(endereco);
+            
+            if(listaDeEndereco == null){
+                listaDeEndereco = new ArrayList<Endereco>();
+            }
+            listaDeEndereco.add(endereco);
+            
+            new LocalFacade().criarLocal(request, endereco);
+            
         } catch (ClassCastException e) {
             throw new RuntimeException(" " + e.getMessage());
         } catch (NullPointerException e) {

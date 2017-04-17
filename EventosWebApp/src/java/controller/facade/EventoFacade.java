@@ -18,7 +18,7 @@ import model.entidade.Usuario;
  *
  * @author Elcio Cestari Taira
  */
-public abstract class EventoFacade {
+public class EventoFacade {
 
     private static ArrayList<Evento> listaDeEventos;
 
@@ -41,7 +41,7 @@ public abstract class EventoFacade {
      * @param request - requisição feita pelo usuario
      * @throws Exception - caso não seja criado um evento
      */
-    public static void criarEvento(HttpServletRequest request) throws Exception {
+    public  void criarEvento(HttpServletRequest request) throws Exception {
         try {
             new EnderecoFacade().criaEndereco(request);
                     
@@ -76,8 +76,18 @@ public abstract class EventoFacade {
      *
      * @return Arraylist uma lista contendo todos os eventos.
      */
-    public static ArrayList<Evento> getListaDeEventos() {
+    public ArrayList<Evento> getListaDeEventos() {
+        setListaDeEventos();
         return listaDeEventos;
     }
+
+    /**
+     * Configura uma ArrayList com todos os Eventos que tem no banco
+     */
+    public  void setListaDeEventos() {
+        listaDeEventos = new EventoDAO().selectAll(listaDeEventos);
+    }
+    
+    
 
 }

@@ -7,35 +7,42 @@ package model.banco.dao;
 
 import model.banco.ConnectionFactory;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import model.entidade.Evento;
 
 /**
  * Essa classe implementa os metodos de consultas e inserções no Banco de Dados
  *
- * @author      Elcio Cestari Taira
- * @version     1.0
- * @since       26/mar/2017
+ * @author Elcio Cestari Taira
+ * @version 1.0
+ * @since 26/mar/2017
  */
 public class EventoDAO extends ConnectionFactory implements InterfaceDAO<Object> {
 
-    
+    private PreparedStatement statement;//utlizado para preparar e executar a query.
+    private ResultSet resultSet;//utlizado para armazenar o resultado da query. 
+    private String sql;//String com a instrução sql que devera ser realizada.
+
     /**
      * Metodo que recebe um Object que deve ser uma instancia de Evento, pois
      * sera feito o casting nesse metodo. E salva-o no banco na tabela evento
      *
-     * @param t                         Objeto que deve ser do tipo Evento
-     * @throws SQLException             Caso haja algum erro ao tentar acessar ou salvar no banco
-     * @throws ClassNotFoundException   Caso haja algum erro em instanciar a o tipo da classe
+     * @param t Objeto que deve ser do tipo Evento
+     * @throws SQLException Caso haja algum erro ao tentar acessar ou salvar no
+     * banco
+     * @throws ClassNotFoundException Caso haja algum erro em instanciar a o
+     * tipo da classe
      */
     @Override
     public void create(Object t) throws SQLException, ClassNotFoundException {
         try {
             Evento evento = (Evento) t;//fazendo casting
 
-            String sql = "INSERT INTO evento(tipo_evento,valor,nome,id_evento,faixaEtaria, id_usuario)Values(?,?,?,?,?,?);";
+            sql = "INSERT INTO evento(tipo_evento,valor,nome,id_evento,faixaEtaria, id_usuario)Values(?,?,?,?,?,?);";
 
-            PreparedStatement statement = getConnection().prepareStatement(sql);
+            statement = getConnection().prepareStatement(sql);
 
             statement.setString(1, evento.getTipo());//valor que será salvo na coluna  tipo_evento
             statement.setDouble(2, evento.getValor());//valor que será salvo na coluna valor
@@ -44,7 +51,7 @@ public class EventoDAO extends ConnectionFactory implements InterfaceDAO<Object>
             statement.setInt(5, evento.getFaixaEtaria());//valor que será salvo na coluna faixa_etaria.
             statement.setInt(6, evento.getId_usuario());//valor que sera salvo como id_usuario.  CHAVE ESTRANGEIRA
             statement.execute();//executando a instrução SQL.
-            
+
         } catch (SQLException sqle) {
             throw new SQLException(sqle.getMessage() + " Houve um erro ao salvar o Evento");
         } catch (ClassNotFoundException cnfe) {
@@ -66,5 +73,59 @@ public class EventoDAO extends ConnectionFactory implements InterfaceDAO<Object>
     public Object findById(int id) throws Exception {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+
+    /**
+     * Seleciona todos os Eventos que estão no banco e os adiciona à list
+     *
+     * @param list um ArrayList que será utlizado para armazenar todos os
+     * Eventos salvos no banco
+     */
+    public ArrayList<Evento> selectAll(ArrayList<Evento> list) {
+        String tipo;
+        String descricao;
+        double valor;
+        String nome;
+        int id_evento;
+        int faixaEtaria;
+
+        if (list == null) {
+            list = new ArrayList<Evento>();//se o arrayList estiver null ele será inicializado aqui.
+        }
+
+        try {
+            sql = "SELECT * FROM evento;";//String para a instrução que selecionará todos os atributos de um evento no banco
+            statement = getConnection().prepareStatement(sql);//estabelece a conecxão com o banco e prepara a instrução sql que será executada
+            resultSet = statement.executeQuery();// executa a  query
+            while (resultSet.next()) {//enquanto houver linhas sendo retornadas da consulta sql...
+                boolean eventoEstaNaLista = false;//sera configurada com true se houver um evento na lista
+                for (int i = 0; i < list.size(); i++) {//percorre a toda a lista 
+                    if (list.get(i).getId_evento() == resultSet.getInt("id_evento")) {//Se um Evento da 'list' tiver o mesmo id que uma tupla do banco...
+                        eventoEstaNaLista = true;//... O evento esta na lista, portanto configura a variavél como true.
+                        break;//interrompe o for e volta para o loop while
+                    }
+                }
+                if (eventoEstaNaLista == false) {//se não tiver no arrayList 'list' um evento com o mesmo id_evento que esta no banco... 
+                    tipo = resultSet.getString("tipo_evento");
+                    descricao = resultSet.getString("descricao");
+                    valor = resultSet.getDouble("valor");
+                    nome = resultSet.getString("nome");
+                    id_evento = resultSet.getInt("id_evento");
+                    faixaEtaria = resultSet.getInt("faixaEtaria");
+                    Evento e = new Evento(tipo, descricao, valor, faixaEtaria, nome, id_evento);//criando um novo evento pois não existia na list o evento que esta no banco
+                    list.add(e);//adicionando Evento recem criado à list
+                }
+            }//fim do while
+        } catch (Exception e) {
+            throw new RuntimeException("Ocorreu um erro ao buscar a lista de eventos: " + e.getMessage());
+        } finally {
+            try {
+                statement.close();
+                resultSet.close();
+            } catch (SQLException e) {
+                throw new RuntimeException(e.getMessage());
+            }
+        }
+        return list;
+    }//fim do método 
 
 }
