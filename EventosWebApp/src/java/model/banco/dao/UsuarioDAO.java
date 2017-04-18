@@ -9,6 +9,7 @@ import model.banco.ConnectionFactory;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.entidade.Usuario;
@@ -24,7 +25,6 @@ import model.entidade.Usuario;
 public class UsuarioDAO extends ConnectionFactory implements InterfaceDAO {
 
     private String sql = null;//sera a variavel que contera as instruções em sql
-
     private PreparedStatement statement = null;//prepara o SQL que será executado
     private ResultSet resultado = null;//sera usado para o armazenar temporariamente o resultado das query
 
@@ -208,6 +208,82 @@ public class UsuarioDAO extends ConnectionFactory implements InterfaceDAO {
             }
         }
         return lastLogin;//retorna o maior id_usuario do banco
+    }
+    
+    /**
+     * Busca no banco todas as instancias da classe Usuario e adiciona a um ArrayList 
+     * @return ArrayList    contendo todos os Usuarios do banco
+     * @throws RuntimeException caso ocorra algum erro ao buscar no banco
+     */
+    public ArrayList getAll() throws RuntimeException{
+        ArrayList<Usuario> listaDeUsuarios = new ArrayList();
+        Usuario usuario;
+        sql = "SELECT * FROM usuario;";
+        try {
+            statement = getConnection().prepareStatement(sql);
+            resultado = statement.executeQuery();
+            while (resultado.next()) {
+                usuario = new Usuario(resultado.getString("login"), 
+                        resultado.getString("nome"), 
+                        resultado.getInt("idade"), 
+                        resultado.getInt("id_usuario"), 
+                        resultado.getString("senha"));
+                
+                listaDeUsuarios.add(usuario);
+            }
+        } catch (ClassNotFoundException | SQLException ex) {
+            throw new RuntimeException("Ocorreu um erro ao buscar a lista de usuarios: " + ex.getMessage());
+        }finally{
+            endConnection();
+        }
+        return listaDeUsuarios;
+    }
+    
+    /**
+     * conta a quantidade de tuplas usuario no banco 
+     * @return int a quantidade de usuarios
+     * @throws RuntimeException caso ocorra um erro na consulta
+     */
+    public int size() throws RuntimeException{
+        int size = 0;
+        sql = "SELECT count(*) as size FROM usuario;";
+        this.conectsAndExecutes(sql);
+        try {
+            while (resultado.next()) {
+                size = resultado.getInt("size");
+            }
+        } catch (SQLException ex) {
+            throw new RuntimeException("Ocorreu um erro: " + ex.getMessage());
+        }
+        return size;        
+    } 
+    
+    /**
+     * Conecta e executa a query repassada como parametro 
+     * @param sql   a instrução sql que será executada no banco
+     * @throws RuntimeException caso ocorra um erro no banco
+     */
+    private void conectsAndExecutes(String sql) throws RuntimeException{
+        try {
+            statement = getConnection().prepareStatement(sql);
+            resultado = statement.executeQuery();
+        } catch (ClassNotFoundException | SQLException ex) {
+            throw new RuntimeException("Ocorreu um erro ao realizar a pesquisa no banco: " + ex.getMessage());
+        }
+    }
+    
+    
+    /**
+     * Finaliza a conexão com o banco
+     */
+    private void endConnection(){
+        
+        try {
+            statement.close();
+            resultado.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(UsuarioDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 }
 

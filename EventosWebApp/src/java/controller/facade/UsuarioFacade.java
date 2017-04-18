@@ -83,12 +83,22 @@ public class UsuarioFacade {
      * @return - if true: Usuario. else: null.
      */
     public static Usuario getUsuario(String login) {
+        setListaDeUsuarios();
         for (int i = 0; i < listaDeUsuarios.size(); i++) {
             if (listaDeUsuarios.get(i).getLogin().equals(login)) {
                 return listaDeUsuarios.get(i);
             }
         }
         return null;
+    }
+    
+    /**
+     * verifica se a listaDeUsuarios no sistema é menor que a do banco, caso seja iguala ambas
+     */
+    public static void setListaDeUsuarios(){
+        if(listaDeUsuarios.size() < new UsuarioDAO().size()){
+            listaDeUsuarios = new UsuarioDAO().getAll();
+        }
     }
 
     /**
