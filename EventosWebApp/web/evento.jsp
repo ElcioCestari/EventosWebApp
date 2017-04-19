@@ -11,29 +11,9 @@
         <header class="jumbotron text-center">
             <%@include file="body/header/header.jsp" %>
         </header>
-        <div class="container">
-            <div class="row">
-                <div class="col-md-4">
-                    <img src="https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcStfDAuvu8lCkbu5ugjEKhsT00G01fnZLhSAbhNFbiza8MIFZfUjYA8n4A">
-                    </img>
-                </div>
-                <div class="col-md-8">
-                    <h3>Titulo da Festa</h3>
-                    <p>Aqui vai uma breve descrição do que conterá na festa</p>
-                    <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris...</p>
-                </div>
-            </div><div class="row">
-                <div class="col-md-4">
-                    <img src="https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcStfDAuvu8lCkbu5ugjEKhsT00G01fnZLhSAbhNFbiza8MIFZfUjYA8n4A">
-                    </img>
-                </div>
-                <div class="col-md-8">
-                    <h3>Titulo da Festa</h3>
-                    <p>Aqui vai uma breve descrição do que conterá na festa</p>
-                    <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris...</p>
-                </div>
-            </div>
-        </div>
+        <section class="container">
+            <%@include file="body/section/evento_detalhado.jsp" %>
+        </section>
         <footer class="col-md-12">
             <%@include file="body/footer/footer.jsp" %>
         </footer>

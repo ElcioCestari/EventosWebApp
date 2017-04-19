@@ -55,6 +55,7 @@ public class ControllerServlet extends HttpServlet {
             } else if (request.getRequestURI().endsWith("/Evento")) {//Requisição feita para acessar a JSP EVENTO
                 verificaAutorizacao(request);
                 request.setAttribute("tituloDaPagina", "Evento");
+                request.setAttribute("evento", new EventoFacade().getEventoById(request));//buscanco o evento que o usuario clicou
                 jsp = "evento.jsp";
 
             } else if (request.getRequestURI().endsWith("/LoginPage")) {//Requisição feita para acessar a JSP LOGIN

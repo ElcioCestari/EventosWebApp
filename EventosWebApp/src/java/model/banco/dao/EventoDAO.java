@@ -10,6 +10,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import model.entidade.Evento;
 
 /**
@@ -127,5 +129,67 @@ public class EventoDAO extends ConnectionFactory implements InterfaceDAO<Object>
         }
         return list;
     }//fim do método 
+
+    /**
+     * Busca no banco na tabela evento uma tupla com o id passaado como
+     * paramettro
+     *
+     * @param id o id que será utilizado na query.
+     * @return um Evento
+     * @throws RuntimeException caso ocorra algum tipo de sqlException
+     */
+    public Evento getById(int id) throws RuntimeException {
+        Evento evento = null;
+        sql = "SELECT * FROM evento WHERE id_evento = " + id + ";";
+        conectsAndExecutes(sql);
+        try {
+            while (resultSet.next()) {
+                evento = new Evento(resultSet.getString("tipo_evento"),
+                        resultSet.getString("descricao"),
+                        resultSet.getDouble("valor"),
+                        resultSet.getInt("faixaEtaria"),
+                        resultSet.getString("nome"),
+                        resultSet.getInt("id_evento")
+                );
+            }
+        } catch (SQLException ex) {
+            throw new RuntimeException("Ocorreu um erro ao buscar o evento: " + ex.getMessage());
+        } finally {
+            endConnection();
+        }
+        return evento;
+    }
+
+    {
+
+    }
+
+    /**
+     * Conecta e executa a query repassada como parametro
+     *
+     * @param sql a instrução sql que será executada no banco
+     * @throws RuntimeException caso ocorra um erro no banco
+     */
+    private void conectsAndExecutes(String sql) throws RuntimeException {
+        try {
+            statement = getConnection().prepareStatement(sql);
+            resultSet = statement.executeQuery();
+        } catch (ClassNotFoundException | SQLException ex) {
+            throw new RuntimeException("Ocorreu um erro ao realizar a pesquisa no banco: " + ex.getMessage());
+        }
+    }
+
+    /**
+     * Finaliza a conexão com o banco
+     */
+    private void endConnection() {
+
+        try {
+            statement.close();
+            resultSet.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(UsuarioDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 
 }
