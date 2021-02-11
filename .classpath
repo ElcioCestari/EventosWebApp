@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="src" path="EventosWebApp/EventosWebApp/src/java"/>
+	<classpathentry kind="lib" path="EventosWebApp/EventosWebApp/build/web/WEB-INF/lib/javaee-web-api-8.0.jar"/>
+	<classpathentry kind="output" path="EventosWebApp/EventosWebApp/build/web/WEB-INF/classes"/>
+</classpath>
