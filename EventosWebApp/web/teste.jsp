@@ -8,9 +8,10 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <%@include file="head/head.jsp" %>
+        <%--<%@include file="head/head.jsp" %>--%>
     </head>
     <body>
-        <p>${endereco}</p>
+        <!--<p>${endereco}</p>-->
+        <p>tested</p>
     </body>
 </html>

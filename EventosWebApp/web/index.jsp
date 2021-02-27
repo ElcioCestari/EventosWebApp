@@ -9,7 +9,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <meta http-equiv="refresh" content="1;'${pageContext.request.contextPath}/Home'">
+        <meta http-equiv="refresh" content="1;'${pageContext.request.contextPath}/home'">
         <title>Carregando...</title>
     </head>
     <body>
