@@ -5,13 +5,15 @@
  */
 package model.banco.dao;
 
-import model.banco.ConnectionFactory;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import model.banco.ConnectionFactory;
+import model.builder.EventoBuilder;
 import model.entidade.Evento;
 
 /**
@@ -76,9 +78,47 @@ public class EventoDAO extends ConnectionFactory implements InterfaceDAO<Object>
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    public List<Evento> selectAll(){
+        List<Evento> list = new ArrayList<>();
+        String sql = "SELECT * FROM evento;";
+        try {
+            statement = getConnection().prepareStatement(sql);
+            resultSet = statement.executeQuery();
+            
+            while (resultSet.next()) {
+                resultSet.next();  
+                String tipo = resultSet.getString("tipo_evento");
+                String descricao = resultSet.getString("descricao");
+                double valor = resultSet.getDouble("valor");
+                String nome = resultSet.getString("nome");
+                int id_evento = resultSet.getInt("id_evento");
+                int faixaEtaria = resultSet.getInt("faixaEtaria");
+                Evento evento = new EventoBuilder()
+                        .setFaixaEtaria(faixaEtaria)
+                        .setDescricao(descricao)
+                        .setId_evento(id_evento)
+                        .setNome(nome)
+                        .setValor(valor)
+                        .build();
+                list.add(evento);//adicionando Evento recem criado à list
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(EventoDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(EventoDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } finally{
+            try {
+                if(statement != null) statement.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(EventoDAO.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return list;
+    }
     /**
      * Seleciona todos os Eventos que estão no banco e os adiciona à list
-     *
+     * @deprecated - Este metodo foi depreciado pois, apos analise, identificou-se que nao fazia sentido um selectall passando uma list como atributo.
+     * @see - <code>selectAll()</code>
      * @param list um ArrayList que será utlizado para armazenar todos os
      * Eventos salvos no banco
      */

@@ -6,8 +6,9 @@
 package controller.facade;
 
 import java.util.ArrayList;
-import model.banco.dao.EventoDAO;
+import java.util.List;
 import javax.servlet.http.HttpServletRequest;
+import model.banco.dao.EventoDAO;
 import model.entidade.Evento;
 import model.entidade.Usuario;
 
@@ -21,6 +22,13 @@ import model.entidade.Usuario;
 public class EventoFacade {
 
     private static ArrayList<Evento> listaDeEventos;
+    private EventoDAO eventoDAO;
+
+    public EventoFacade() {
+        this.eventoDAO = new EventoDAO();
+    }
+    
+    
 
     /**
      * Metodo que recebe como parametro um HttpServletRequest CONFIGURADO,ou
@@ -76,9 +84,9 @@ public class EventoFacade {
      *
      * @return Arraylist uma lista contendo todos os eventos.
      */
-    public ArrayList<Evento> getListaDeEventos() {
-        setListaDeEventos();
-        return listaDeEventos;
+    public List<Evento> getListaDeEventos() {
+        ///setListaDeEventos();
+        return eventoDAO.selectAll();
     }
 
     /**

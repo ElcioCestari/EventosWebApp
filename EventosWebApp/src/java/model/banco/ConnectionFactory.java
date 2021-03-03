@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package model.banco;
 
 import java.sql.Connection;
@@ -20,11 +15,10 @@ import java.sql.SQLException;
  */
 public class ConnectionFactory {
 
-    private static final String driver = "com.mysql.jdbc.Driver";
+    private static final String driver = "com.mysql.cj.jdbc.Driver";
     private static final String url = "jdbc:mysql://localhost:3306/eventoswebapp";
-    private static final String user = "admin";
+    private static final String user = "root";
     private static final String password = "admin";
-
 
     private PreparedStatement statement = null;
     
@@ -41,6 +35,7 @@ public class ConnectionFactory {
             Class.forName(driver);
             return DriverManager.getConnection(url, user, password);
         } catch (SQLException e) {
+            System.err.println(e.getMessage());
             new SQLException("Não foi possível conectar-se ao banco de dados");
         } catch (ClassNotFoundException e) {
             new ClassNotFoundException("Não foi possivel registrar o driver jdbc do mysql");
