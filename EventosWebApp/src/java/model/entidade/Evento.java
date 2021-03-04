@@ -101,12 +101,8 @@ public class Evento {
      * Configura a faixa etaria
      * 
      * @param faixaEtaria   <code>int</code>
-     * @throws IllegalArgumentException Caso a idade seja um valor invalido
      */
     public void setFaixaEtaria(int faixaEtaria) throws IllegalArgumentException{
-        if(faixaEtaria < 0){
-            throw new IllegalArgumentException("Faixa etaria tem que ser maior que zero");
-        }
         this.faixaEtaria = faixaEtaria;
     }
 
@@ -122,12 +118,8 @@ public class Evento {
      * Configura o id do evento
      * 
      * @param id_evento Um <code>int</code> que representa o id do <code>Evento</code>
-     * @throws IllegalArgumentException caso o id seja menor do que 1
      */
     private void setId_evento(int id_evento) throws IllegalArgumentException{
-        if(id_evento < 1){
-            throw new IllegalArgumentException("O id do evento não pode ser um inteiro negativo");
-        }
         this.id_evento = id_evento;
     }
 
@@ -144,12 +136,8 @@ public class Evento {
      * Configura o tipo de um evento
      * 
      * @param tipo  <code>String</code> que deve ser o tipo que sera o Evento. Exemplo: festa
-     * @throws IllegalArgumentException se o tipo for vazio ou nulo
      */
     public void setTipo(String tipo) throws IllegalArgumentException{
-        if(tipo.equals("") || tipo == null){
-            throw new IllegalArgumentException("O tipo não é valido");
-        }
         this.tipo = tipo;
     }
 
@@ -184,12 +172,8 @@ public class Evento {
      * Configura o valor de um evento.
      * 
      * @param valor <code>double</code>
-     * @throws IllegalArgumentException caso o valor seja negativo.
      */
     public void setValor(double valor) throws IllegalArgumentException{
-        if(valor < 0){
-            throw new IllegalArgumentException("O valor de um evento não pode ser negativo");
-        }
         this.valor = valor;
     }
 
@@ -207,9 +191,6 @@ public class Evento {
      * @throws IllegalArgumentException Caso o parametro tenha um valor vazio ou nulo.
      */
     public void setNome(String nome) throws IllegalArgumentException{
-        if(nome.equals("") || nome == null){
-            throw new IllegalArgumentException("O nome do evento é inválido");
-        }
         this.nome = nome;
     }
 
@@ -226,12 +207,8 @@ public class Evento {
      * Configura o id de um usuario
      * 
      * @param id_usuario    <code>int</code>
-     * @throws IllegalArgumentException Lança essa exceção caso o parametro seja um numero menor do que 1
      */
     public void setId_usuario(int id_usuario) throws IllegalArgumentException{
-        if(id_usuario < 1){
-            throw new IllegalArgumentException("A id_usuario deve ser um inteiro positivo maior que zero");
-        }
         this.id_usuario = id_usuario;
     }
 

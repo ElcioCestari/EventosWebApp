@@ -36,6 +36,7 @@ public class ConnectionFactory {
             return DriverManager.getConnection(url, user, password);
         } catch (SQLException e) {
             System.err.println(e.getMessage());
+            Exception ex = e;
             new SQLException("Não foi possível conectar-se ao banco de dados");
         } catch (ClassNotFoundException e) {
             new ClassNotFoundException("Não foi possivel registrar o driver jdbc do mysql");

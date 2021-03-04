@@ -85,8 +85,7 @@ public class EventoDAO extends ConnectionFactory implements InterfaceDAO<Object>
             statement = getConnection().prepareStatement(sql);
             resultSet = statement.executeQuery();
             
-            while (resultSet.next()) {
-                resultSet.next();  
+            while (resultSet.next()) {               
                 String tipo = resultSet.getString("tipo_evento");
                 String descricao = resultSet.getString("descricao");
                 double valor = resultSet.getDouble("valor");
