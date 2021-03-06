@@ -12,6 +12,7 @@
             <%--<%@include file="body/header/header.jsp"%>--%>
         </header>
         <section class="container">
+            <h2>Exibindo eventos</h2>
             <%@include file="body/section/listaDeEventos.jsp"%>
         </section>
         <footer class="col-md-12">
