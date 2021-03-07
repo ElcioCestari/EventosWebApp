@@ -5,6 +5,5 @@
     Author     : Elcio Cestari Taira
 --%>
 
-
 <h1 class="tituloDaPagina">Eventos Campo Grande</h1>
 <h2 class="subtituloDaPagina">Encontre e divulgue os seus eventos preferidos!</h2>

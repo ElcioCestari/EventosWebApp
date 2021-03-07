@@ -3,6 +3,7 @@
     Created on : 05/04/2017, 14:47:44
     Author     : Elcio Cestari Taira
 --%>
+<script>alert(${resultado})</script>
 <fieldset><legend><strong>Detalhes do evento:</strong></legend>
     <div class="form-group">
         <label for="nomeEvento">Nome:</label>

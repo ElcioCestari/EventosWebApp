@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package model.banco.dao;
 
 import java.sql.PreparedStatement;
@@ -44,7 +39,7 @@ public class EventoDAO extends ConnectionFactory implements InterfaceDAO<Object>
         try {
             Evento evento = (Evento) t;//fazendo casting
 
-            sql = "INSERT INTO evento(tipo_evento,valor,nome,id_evento,faixaEtaria, id_usuario)Values(?,?,?,?,?,?);";
+            sql = "INSERT INTO evento(tipo_evento,valor,nome,id_evento,faixaEtaria)Values(?,?,?,?,?);";
 
             statement = getConnection().prepareStatement(sql);
 
@@ -53,7 +48,7 @@ public class EventoDAO extends ConnectionFactory implements InterfaceDAO<Object>
             statement.setString(3, evento.getNome());//valor que será salvo na coluna nome
             statement.setInt(4, evento.getId_evento());//valor que será salvo na coluna id_evento. Essa coluna é uma PRIMARY KEY
             statement.setInt(5, evento.getFaixaEtaria());//valor que será salvo na coluna faixa_etaria.
-            statement.setInt(6, evento.getId_usuario());//valor que sera salvo como id_usuario.  CHAVE ESTRANGEIRA
+//            statement.setInt(6, evento.getId_usuario());//valor que sera salvo como id_usuario.  CHAVE ESTRANGEIRA
             statement.execute();//executando a instrução SQL.
 
         } catch (SQLException sqle) {

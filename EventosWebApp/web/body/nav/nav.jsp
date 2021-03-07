@@ -16,8 +16,8 @@
 <%--</c:choose>--%> 
 <div class="container-fluid">
     <div class="navbar-header"><a class="navbar-brand" href="${pageContext.request.contextPath}/home">Eventos Web</a></div>
-    <ul class="nav navbar-nav"><li class="${class_active_home}"><a href="${pageContext.request.contextPath}/home">home</a></li></ul>
-    <ul class="nav navbar-nav"><li class="${class_active_perfil}"><a href="${pageContext.request.contextPath}/Perfil">Perfil</a></li></ul>
+    <!--<ul class="nav navbar-nav"><li class="${class_active_home}"><a href="${pageContext.request.contextPath}/home">home</a></li></ul>-->
+    <ul class="nav navbar-nav"><li class="${class_active_perfil}"><a href="${pageContext.request.contextPath}/login">Login</a></li></ul>
     <ul class="nav navbar-nav"><li class="${class_active_evento}"><a href="${pageContext.request.contextPath}/CadastrarEvento">Cadastrar Evento</a></li></ul>
     <!--<ul class="nav navbar-nav navbar-right">-->
         <%--<c:choose>--%>

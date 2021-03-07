@@ -1,0 +1,10 @@
+/* 
+    Created on : Mar 5, 2021, 10:58:54 PM
+    Author     : elciotaira
+*/
+.formulario{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
