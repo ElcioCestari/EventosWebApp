@@ -1,8 +1,3 @@
-/*
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
-*/
 /* 
     Created on : 13/03/2017, 21:56:22
     Author     : Elcio Cestari Taira
@@ -69,7 +64,6 @@ section .row img {
 
 footer {
   font-size: 12px;
-  padding: 20px 0;
 }
 
 footer .col-sm-8 {
@@ -88,12 +82,13 @@ footer li img {
 
 footer{
     background-color: #222;
+    padding: 50px 0px 0px 0px;
     
 }
 .direitos_autorais{
     color: #fff;
+    padding: 50px 0px 0px 0px;
 }
 body {
-    
   background-color: #330033;
 }

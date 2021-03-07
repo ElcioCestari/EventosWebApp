@@ -1,4 +1,4 @@
-package model.builder;
+package builder;
 
 import model.entidade.Evento;
 

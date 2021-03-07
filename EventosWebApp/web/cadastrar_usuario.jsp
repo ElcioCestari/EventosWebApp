@@ -22,7 +22,7 @@
         <section class="container">
             <form class="col-md-6" action="${pageContext.request.contextPath}/SalvarUsuario" method="post" autocomplete="on">
                 <%@include file="body/section/form/usuario.jsp" %>
-                <input type="submit" class="btn btn-default" value="Salvar"></input>
+                <input type="submit" class="btn-default" value="Salvar"></input>
             </form>
         </section>
         <footer class="col-md-12">

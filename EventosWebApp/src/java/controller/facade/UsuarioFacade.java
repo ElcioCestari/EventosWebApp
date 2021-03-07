@@ -1,14 +1,10 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package controller.facade;
 
-import model.banco.dao.UsuarioDAO;
+import builder.UsuarioBuilder;
 import java.util.ArrayList;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import model.banco.dao.UsuarioDAO;
 import model.entidade.Usuario;
 
 /**
@@ -29,6 +25,7 @@ public class UsuarioFacade {
      */
     private static Integer id_usuario;
     private static ArrayList<Usuario> listaDeUsuarios;//VARIAVEL GLOBAL que representa todos os usuarios
+    private UsuarioDAO usuarioDAO;
 
     /**
      * Construtor padrão. Ao ser invoado ele ira verificar se ja existe uma
@@ -67,7 +64,6 @@ public class UsuarioFacade {
      * <code>Usuario</code>
      */
     public static Usuario getUsuarioDaSessao(HttpServletRequest request) {
-
         if (estaLogado(request)) {
             return getUsuario((String) request.getSession().getAttribute("usuario.login"));
         }
@@ -145,25 +141,34 @@ public class UsuarioFacade {
      * positiva ou negativa.
      */
     public HttpServletRequest salvarUsuario(HttpServletRequest request) {
+        this.usuarioDAO = new UsuarioDAO();
         Usuario usuario = null;
         String mensagem = null;
         String nome = (String) request.getParameter("nome");//fazendo casting para atribuir os valores aos respectivos atributos
         String senha = (String) request.getParameter("senha");//fazendo casting para atribuir os valores aos respectivos atributos
         int idade = Integer.parseInt(request.getParameter("idade"));//fazendo casting para atribuir os valores aos respectivos atributos
         String login = (String) request.getParameter("login");//fazendo casting para atribuir os valores aos respectivos atributos
-        int id_usuario = new UsuarioDAO().getLastLogin() + 1;//recupera o maior id do usuario salvo no banco e soma 1 para ser inserido um numero diferente no banco
+//        int id_usuario = new UsuarioDAO().getLastLogin() + 1;//recupera o maior id do usuario salvo no banco e soma 1 para ser inserido um numero diferente no banco
         try {
 
-            boolean b = new UsuarioDAO().findByLogin(login);//verifica se existe o login 
-            if (b) {//caso exista o login lanca exceção
+            boolean existeusuario = usuarioDAO.findByLogin(login);//verifica se existe o login 
+            if (existeusuario) {//caso exista o login lanca exceção
                 mensagem = "Ja existe este login cadastrado";
                 throw new IllegalArgumentException(mensagem);
             }
 
-            usuario = new Usuario(login, nome, idade, id_usuario, senha);
-            new UsuarioDAO().create(usuario);
+//            usuario = new Usuario(login, nome, idade, id_usuario, senha);
+            
+            usuario = new UsuarioBuilder()
+                    .setIdade(idade)
+                    .setLogin(login)
+                    .setSenha(senha)
+                    .setNome(nome)
+                    .builder();
+            
+            this.usuarioDAO.create(usuario);
             listaDeUsuarios.add(usuario);//adiciona um novo usuario a listadeUsuarios
-            logar(request);//faz o login, o que inclui um usuario na sessão
+//            logar(request);//faz o login, o que inclui um usuario na sessão
             mensagem = "Dados salvo com sucesso!";//mensagem positiva
         } catch (Exception e) {
             mensagem = e.getMessage();//APENAS PARA DEBUG

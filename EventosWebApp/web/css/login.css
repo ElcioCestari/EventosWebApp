@@ -1,0 +1,13 @@
+/* 
+    Created on : Mar 7, 2021, 10:39:47 AM
+    Author     : elciotaira
+*/
+.login{
+    display: flex;
+    align-itens: center;
+    justify-contents: center;
+    margin: 20px;
+    padding: 20px;
+    margin-bottom: 30px;
+
+}

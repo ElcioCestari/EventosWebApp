@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import model.banco.dao.EventoDAO;
-import model.builder.EventoBuilder;
+import builder.EventoBuilder;
 import model.entidade.Evento;
 import model.entidade.Usuario;
 
