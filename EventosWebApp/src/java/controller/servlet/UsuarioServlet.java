@@ -25,7 +25,12 @@ public class UsuarioServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         usuarioFacade = new UsuarioFacade();
-        usuarioFacade.salvarUsuario(request);
+        
+        try {
+            usuarioFacade.salvarUsuario(request);
+        } catch (Exception e) {
+            this.doGet(request, response);
+        }
+        
     }
-
 }

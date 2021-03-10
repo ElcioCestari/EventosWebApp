@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package model.banco.dao;
 
 import model.banco.ConnectionFactory;
@@ -272,12 +267,10 @@ public class UsuarioDAO extends ConnectionFactory implements InterfaceDAO {
         }
     }
     
-    
     /**
      * Finaliza a conexão com o banco
      */
-    private void endConnection(){
-        
+    private void endConnection(){ 
         try {
             statement.close();
             resultado.close();

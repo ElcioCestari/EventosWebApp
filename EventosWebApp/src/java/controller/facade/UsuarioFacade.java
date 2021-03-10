@@ -110,11 +110,12 @@ public class UsuarioFacade {
      * @throws Exception - caso não seja possível fazer o login
      */
     public boolean logar(HttpServletRequest request) throws Exception {
+        this.usuarioDAO = new UsuarioDAO();
         String login = (String) request.getParameter("login");
         String senha = (String) request.getParameter("senha");
 
         try {
-            if (new UsuarioDAO().verificaAutenticacao(login, senha)) {//Se o login e senha digitados pelo usuario baterem...
+            if (usuarioDAO.verificaAutenticacao(login, senha)) {//Se o login e senha digitados pelo usuario baterem...
                 request.getSession().invalidate();//finalizando a sessão por questões de segurança
                 HttpSession session = request.getSession(true);//criando uma sessao
                 session.setAttribute("autorizacao", true);//Autorizando o usuario na sessao
@@ -128,7 +129,6 @@ public class UsuarioFacade {
             throw new Exception(ex.getMessage());
         }
         return false;
-
     }
 
     /**
@@ -140,7 +140,7 @@ public class UsuarioFacade {
      * @return request - com o parametro 'mensagem' configurado com uma mensagem
      * positiva ou negativa.
      */
-    public HttpServletRequest salvarUsuario(HttpServletRequest request) {
+    public HttpServletRequest salvarUsuario(HttpServletRequest request)throws RuntimeException{
         this.usuarioDAO = new UsuarioDAO();
         Usuario usuario = null;
         String mensagem = null;
@@ -150,9 +150,8 @@ public class UsuarioFacade {
         String login = (String) request.getParameter("login");//fazendo casting para atribuir os valores aos respectivos atributos
 //        int id_usuario = new UsuarioDAO().getLastLogin() + 1;//recupera o maior id do usuario salvo no banco e soma 1 para ser inserido um numero diferente no banco
         try {
-
-            boolean existeusuario = usuarioDAO.findByLogin(login);//verifica se existe o login 
-            if (existeusuario) {//caso exista o login lanca exceção
+            boolean existeUsuario = usuarioDAO.findByLogin(login);//verifica se existe o login 
+            if (existeUsuario) {//caso exista o login lanca exceção
                 mensagem = "Ja existe este login cadastrado";
                 throw new IllegalArgumentException(mensagem);
             }
@@ -172,6 +171,7 @@ public class UsuarioFacade {
             mensagem = "Dados salvo com sucesso!";//mensagem positiva
         } catch (Exception e) {
             mensagem = e.getMessage();//APENAS PARA DEBUG
+            throw new RuntimeException(mensagem);
         } finally {
             request.setAttribute("mensagem", mensagem);//seta a 'mensagem' do request
         }

@@ -2,7 +2,6 @@ package controller.servlet;
 
 import controller.facade.UsuarioFacade;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
@@ -17,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
  */
 @WebServlet(name = "LoginServlet", urlPatterns = {"/login", "/logout"})
 public class LoginServlet extends HttpServlet {
+
     private UsuarioFacade usuarioFacade;
 
     @Override
@@ -25,10 +25,14 @@ public class LoginServlet extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         usuarioFacade = new UsuarioFacade();
         try {
-            usuarioFacade.logar(request);
+            if (usuarioFacade.logar(request)) {
+                response.sendRedirect(request.getContextPath() + "/home");
+                return;
+            }
+            response.sendRedirect(request.getContextPath() + "/login");
         } catch (Exception ex) {
             Logger.getLogger(LoginServlet.class.getName()).log(Level.SEVERE, null, ex);
             response.sendRedirect("/login");
