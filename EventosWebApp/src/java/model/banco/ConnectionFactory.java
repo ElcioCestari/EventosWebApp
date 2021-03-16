@@ -14,6 +14,7 @@ import java.sql.SQLException;
  *
  */
 public class ConnectionFactory {
+    private Connection connection;
 
     private static final String driver = "com.mysql.cj.jdbc.Driver";
     private static final String url = "jdbc:mysql://localhost:3306/eventoswebapp";
@@ -30,7 +31,7 @@ public class ConnectionFactory {
      * @throws SQLException caso ocorra algum erro em estabelecer uma comunicação com o banco
      */
     public Connection getConnection() throws ClassNotFoundException, SQLException {
-
+        if(this.connection != null) return this.connection;
         try {
             Class.forName(driver);
             return DriverManager.getConnection(url, user, password);

@@ -194,10 +194,6 @@ public class EventoDAO extends ConnectionFactory implements InterfaceDAO<Object>
         return evento;
     }
 
-    {
-
-    }
-
     /**
      * Conecta e executa a query repassada como parametro
      *
