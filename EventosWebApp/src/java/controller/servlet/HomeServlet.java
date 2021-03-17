@@ -3,7 +3,10 @@ package controller.servlet;
 import controller.facade.EventoFacade;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.SQLException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -18,11 +21,17 @@ import model.entidade.Evento;
 @WebServlet(name = "HomeServlet", urlPatterns = {"/home"})
 public class HomeServlet extends HttpServlet {
     private static final String TITULO_DA_PAGINA = "/home";
-    private EventoFacade eventoFacade = new EventoFacade();
+    private EventoFacade eventoFacade;
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        
+        try {
+            eventoFacade = new EventoFacade();
+        } catch (SQLException ex) {
+            Logger.getLogger(HomeServlet.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(HomeServlet.class.getName()).log(Level.SEVERE, null, ex);
+        }
         List<Evento> listEventos = eventoFacade.getListaDeEventos();
         request.setAttribute("listEventos", listEventos);
         request.setAttribute("tituloDaPagina", TITULO_DA_PAGINA);

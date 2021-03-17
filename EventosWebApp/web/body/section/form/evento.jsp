@@ -25,4 +25,8 @@
         <label for="faixaEtaria">Faixa Etaria</label>
         <input type="number" class="form-control" id="faixaEtaria" name="faixaEtaria" placeholder="Qual a faixa etaria do evento?" min="0" max="21" required>
     </div>
+    <div class="form-group">
+        <label for="imagem">Imagem do Evento</label>
+        <input type="file" class="form-control" id="img_evento" name="imgEvento" placeholder="Foto para divulgação" required accept="image/*">
+    </div>
 </fieldset>

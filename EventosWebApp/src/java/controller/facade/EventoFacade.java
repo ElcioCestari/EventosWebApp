@@ -1,11 +1,13 @@
 package controller.facade;
 
+import builder.EventoBuilder;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import model.banco.dao.EventoDAO;
-import builder.EventoBuilder;
 import model.entidade.Evento;
+import model.entidade.Imagem;
 import model.entidade.Usuario;
 
 /**
@@ -19,9 +21,11 @@ public class EventoFacade {
 
     private static ArrayList<Evento> listaDeEventos;
     private EventoDAO eventoDAO;
+    private ImagemFacade imagemFacade;
 
-    public EventoFacade() {
+    public EventoFacade() throws SQLException, ClassNotFoundException {
         this.eventoDAO = new EventoDAO();
+        this.imagemFacade = new ImagemFacade();
     }
 
     /**
@@ -45,25 +49,8 @@ public class EventoFacade {
      */
     public Evento criarEvento(HttpServletRequest request) throws Exception {
         try {
-//            new EnderecoFacade().criaEndereco(request);
-
-            String nomeEvento = (String) request.getParameter("nomeEvento");//Fazendo casting. throw ClassCastException 
-            String tipo = (String) request.getParameter("tipo_evento");//Fazendo casting. throw ClassCastException
-            String descricao = (String) request.getParameter("descricao");//Fazendo casting. throw ClassCastException
-            double valor = Double.parseDouble(request.getParameter("valor"));//Fazendo casting. throw ClassCastException
-            int faixaEtaria = Integer.parseInt(request.getParameter("faixaEtaria"));//Fazendo casting. throw ClassCastException
-
-//            Usuario usuario = (Usuario) request.getSession().getAttribute("usuario");//problema esta aqui
-//            Evento evento = new Evento(tipo, descricao, valor, faixaEtaria, nomeEvento, usuario.getId_usuario());
-
-            Evento evento = new EventoBuilder()
-                    .setDescricao(descricao)
-                    .setFaixaEtaria(faixaEtaria)
-                    .setNome(nomeEvento)
-                    .setTipo(tipo)
-                    .setValor(valor)
-                    .build();
-                    
+            Evento evento = mapRequestToEvento(request);
+            Imagem img = this.imagemFacade.salvarImagem(request);
             this.eventoDAO.create(evento);
 
 //            //estou tendo problemas aqui, pois o listaDeEventos ta null mas não ta entrando no if
@@ -71,7 +58,6 @@ public class EventoFacade {
 //                listaDeEventos = new ArrayList<>();
 //            }
 //            listaDeEventos.add(evento);
-            
             return evento;
 
         } catch (ClassCastException e) {
@@ -114,10 +100,10 @@ public class EventoFacade {
             evento = getEventoByIdInTheList(id);//pegando o evento no arraylist
             if (evento != null) {//o evento esta na lista
                 return evento;
-            }else {//o evento não esta na lista
+            } else {//o evento não esta na lista
                 evento = getEventoByIdInTheBase(id);//buscanco o evento no banco . . .
             }
-            
+
         } catch (ClassCastException e) {
             throw new RuntimeException("O id do evento deve ser um numero. Erro: " + e.getMessage());
         }
@@ -126,8 +112,9 @@ public class EventoFacade {
 
     /**
      * busca na listaDeEventos um Evento que corresponda ao id
-     * @param id    inteiro que representa o id do evento   
-     * @return      um Evento que contenha o id ou null caso não haja
+     *
+     * @param id inteiro que representa o id do evento
+     * @return um Evento que contenha o id ou null caso não haja
      */
     public Evento getEventoByIdInTheList(int id) {
         for (int i = 0; i < listaDeEventos.size(); i++) {
@@ -140,19 +127,42 @@ public class EventoFacade {
 
     /**
      * Busca no banco um evento pelo id
-     * @param id    inteiro que deve ser o id do evento
-     * @return      o evento correspondente ao id ou null caso não haja
+     *
+     * @param id inteiro que deve ser o id do evento
+     * @return o evento correspondente ao id ou null caso não haja
      * @throws RuntimeException lançada pelo DAO
      */
-    public Evento getEventoByIdInTheBase(int id) throws RuntimeException{
+    public Evento getEventoByIdInTheBase(int id) throws RuntimeException {
         return new EventoDAO().getById(id);
     }
-    
+
     /**
      * busca todos os eventos que estao no banco e nao estao na listaDeEventos
+     *
      * @throws RuntimeException caso o corra algum erro no EventoDAO
      */
-    public void refreshesListaDeEventos() throws RuntimeException{
+    public void refreshesListaDeEventos() throws RuntimeException {
         listaDeEventos = new EventoDAO().selectAll(listaDeEventos);
+    }
+
+    private Evento mapRequestToEvento(HttpServletRequest request) throws Exception {
+//            new EnderecoFacade().criaEndereco(request);
+        String nomeEvento = (String) request.getParameter("nomeEvento");//Fazendo casting. throw ClassCastException 
+        String tipo = (String) request.getParameter("tipo_evento");//Fazendo casting. throw ClassCastException
+        String descricao = (String) request.getParameter("descricao");//Fazendo casting. throw ClassCastException
+        double valor = Double.parseDouble(request.getParameter("valor"));//Fazendo casting. throw ClassCastException
+        int faixaEtaria = Integer.parseInt(request.getParameter("faixaEtaria"));//Fazendo casting. throw ClassCastException
+        
+//            Usuario usuario = (Usuario) request.getSession().getAttribute("usuario");//problema esta aqui
+//            Evento evento = new Evento(tipo, descricao, valor, faixaEtaria, nomeEvento, usuario.getId_usuario());
+        Evento evento = new EventoBuilder()
+                .setDescricao(descricao)
+                .setFaixaEtaria(faixaEtaria)
+                .setNome(nomeEvento)
+                .setTipo(tipo)
+                .setValor(valor)
+                .build();
+        
+        return evento;
     }
 }

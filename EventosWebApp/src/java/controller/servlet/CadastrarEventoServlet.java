@@ -29,8 +29,8 @@ public class CadastrarEventoServlet extends HttpServlet {
             this.enviaParaPaginaDeLogin(request, response);
             return;
         }
-        eventoFacade = new EventoFacade();
         try {
+            eventoFacade = new EventoFacade();
             Evento evento = this.eventoFacade.criarEvento(request);
             request.setAttribute("resultado", "evento cadastrado com sucesso!");
             response.sendRedirect(request.getContextPath() + "/home");

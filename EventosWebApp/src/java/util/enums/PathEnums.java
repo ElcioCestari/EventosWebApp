@@ -12,4 +12,8 @@ public enum PathEnums {
     private PathEnums(String value) {
         this.value = value;
     }
+
+    public String getValue() {
+        return value;
+    }
 }
