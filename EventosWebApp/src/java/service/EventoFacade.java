@@ -1,14 +1,14 @@
-package controller.facade;
+package service;
 
 import builder.EventoBuilder;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
-import model.banco.dao.EventoDAO;
-import model.entidade.Evento;
-import model.entidade.Imagem;
-import model.entidade.Usuario;
+import dao.EventoDAO;
+import entidade.Evento;
+import entidade.Imagem;
+import entidade.Usuario;
 
 /**
  * Essa classe prove uma abstração maior para poder acessar os recursos que são
@@ -50,8 +50,8 @@ public class EventoFacade {
     public Evento criarEvento(HttpServletRequest request) throws Exception {
         try {
             Evento evento = mapRequestToEvento(request);
-            Imagem img = this.imagemFacade.salvarImagem(request);
             this.eventoDAO.create(evento);
+            Imagem img = this.imagemFacade.salvarImagem(request, evento);
 
 //            //estou tendo problemas aqui, pois o listaDeEventos ta null mas não ta entrando no if
 //            if (listaDeEventos == null) {
@@ -61,9 +61,8 @@ public class EventoFacade {
             return evento;
 
         } catch (ClassCastException e) {
-            throw new RuntimeException("Ocorreu um erro de sistema: " + e.getMessage() + " Por favor tente novamente!");
-        } catch (Exception e) {
-            throw new Exception(e.getMessage() + " Houve um erro ao cadastrar o evento. Por favor, tente novamente ou mais tarde!");
+            e.printStackTrace();
+            throw new RuntimeException("Erro ao salvar evento: " + e.getMessage() + " Por favor tente novamente!");
         }
     }
 

@@ -1,4 +1,4 @@
-package model.entidade;
+package entidade;
 
 /**
  * <p>

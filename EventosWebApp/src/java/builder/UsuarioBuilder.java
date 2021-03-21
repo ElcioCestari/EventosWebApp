@@ -1,6 +1,6 @@
 package builder;
 
-import model.entidade.Usuario;
+import entidade.Usuario;
 
 /**
  *

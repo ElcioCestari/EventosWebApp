@@ -1,8 +1,9 @@
 package model.banco.dao;
 
+import dao.EventoDAO;
 import java.sql.PreparedStatement;
 import java.util.ArrayList;
-import model.entidade.Evento;
+import entidade.Evento;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;

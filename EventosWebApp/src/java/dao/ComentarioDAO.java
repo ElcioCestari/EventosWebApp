@@ -3,19 +3,20 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package model.banco.dao;
+package dao;
 
-import model.banco.ConnectionFactory;
+import connections.ConnectionFactory;
+import entidade.Comentario;
 
 
 /**
  *
  * @author Elcio Cestari Taira
  */
-public class ComentarioDAO extends ConnectionFactory implements InterfaceDAO{
+public class ComentarioDAO extends ConnectionFactory implements InterfaceDAO<Comentario>{
 
     @Override
-    public void create(Object t) throws Exception {
+    public Comentario create(Comentario t) throws Exception {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -25,13 +26,14 @@ public class ComentarioDAO extends ConnectionFactory implements InterfaceDAO{
     }
 
     @Override
-    public void upDate() {
+    public Comentario upDate(Comentario t) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public Object findById(int id) throws Exception {
+    public Comentario findById(int id) throws Exception {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    
+
+
 }

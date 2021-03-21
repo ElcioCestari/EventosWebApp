@@ -1,6 +1,6 @@
 package controller.servlet;
 
-import controller.facade.UsuarioFacade;
+import service.UsuarioFacade;
 import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;

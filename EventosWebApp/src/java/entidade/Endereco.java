@@ -1,4 +1,4 @@
-package model.entidade;
+package entidade;
 
 /**
  * Modela um Endereco com seus atributos e métodos

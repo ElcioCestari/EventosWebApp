@@ -1,11 +1,11 @@
-package model.banco.dao;
+package dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import model.banco.ConnectionFactory;
-import model.banco.util.enums.NomeTabelaEnum;
-import model.entidade.Imagem;
+import connections.ConnectionFactory;
+import dao.util.enums.NomeTabelaEnum;
+import entidade.Imagem;
 /**
  *
  * @author elciotaira
@@ -20,13 +20,16 @@ public class ImagemEventoDAO implements InterfaceDAO<Imagem>{
     }
     
     @Override
-    public void create(Imagem imagem) throws SQLException {
-        String sql = "INSERT INTO " + tabela + "(nome,path)values(?,?);";
+    public Imagem create(Imagem imagem) throws SQLException {
+        String sql = "INSERT INTO " + tabela + "(nome,path, fk_evento)values(?,?,?);";
         
         PreparedStatement statement = con.prepareStatement(sql);
         statement.setString(1, imagem.getNome());
         statement.setString(2, imagem.getPath());
+        statement.setInt(3, imagem.getFk_evento());
         statement.execute();
+        
+        return null;
     }
 
     @Override
@@ -35,7 +38,7 @@ public class ImagemEventoDAO implements InterfaceDAO<Imagem>{
     }
 
     @Override
-    public void upDate() {
+    public Imagem upDate(Imagem imagem) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

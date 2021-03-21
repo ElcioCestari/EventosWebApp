@@ -1,10 +1,11 @@
-package controller.facade;
+package service;
 
 import java.sql.SQLException;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
-import model.banco.dao.ImagemEventoDAO;
-import model.entidade.Imagem;
+import dao.ImagemEventoDAO;
+import entidade.Evento;
+import entidade.Imagem;
 import util.enums.PathEnums;
 
 /**
@@ -16,8 +17,8 @@ public class ImagemFacade {
     public ImagemFacade() throws SQLException, ClassNotFoundException {
         this.imagemDAO = new ImagemEventoDAO();
     }
-    public Imagem salvarImagem(HttpServletRequest request) throws Exception {
-        Imagem img = mapRequestToImagem(request);
+    public Imagem salvarImagem(HttpServletRequest request, Evento evento) throws Exception {
+        Imagem img = prepararImgParaSalvarNoBanco(request, evento);
         salvarNoBanco(img);
         return img;
     }
@@ -37,5 +38,11 @@ public class ImagemFacade {
 
     private String configureImagemPath() {
         return PathEnums.PATH.value + "/nome-aleatorio.png";
+    }
+
+    private Imagem prepararImgParaSalvarNoBanco(HttpServletRequest request, Evento evento) {
+        Imagem img = mapRequestToImagem(request);
+        img.setFk_evento(evento.getId_evento());
+        return img;
     }
 }

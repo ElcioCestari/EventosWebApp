@@ -1,11 +1,11 @@
-package controller.facade;
+package service;
 
 import builder.UsuarioBuilder;
 import java.util.ArrayList;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import model.banco.dao.UsuarioDAO;
-import model.entidade.Usuario;
+import dao.UsuarioDAO;
+import entidade.Usuario;
 
 /**
  * Classe utilizada para fazer o controle dos usuarios

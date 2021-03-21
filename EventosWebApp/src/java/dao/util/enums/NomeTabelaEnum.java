@@ -1,4 +1,4 @@
-package model.banco.util.enums;
+package dao.util.enums;
 
 /**
  *

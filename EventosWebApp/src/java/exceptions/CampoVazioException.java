@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package model.exception;
+package exceptions;
 
 /**
  * Classe utilizada para lançar exceções aonde é esperado algo porém não ha.

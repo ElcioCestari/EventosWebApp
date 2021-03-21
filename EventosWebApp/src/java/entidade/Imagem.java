@@ -1,4 +1,4 @@
-package model.entidade;
+package entidade;
 
 /**
  *
@@ -9,6 +9,7 @@ public class Imagem {
     private Integer id;
     private String path;
     private String nome;
+    private Integer fk_evento;
 
     public Imagem() {
     }
@@ -36,6 +37,13 @@ public class Imagem {
     public void setNome(String nome) {
         this.nome = nome;
     }
-    
-    
+
+    public Integer getFk_evento() {
+        return fk_evento;
+    }
+
+    public void setFk_evento(Integer fk_evento) {
+        this.fk_evento = fk_evento;
+    }
+       
 }

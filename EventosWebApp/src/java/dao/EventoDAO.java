@@ -1,4 +1,4 @@
-package model.banco.dao;
+package dao;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -7,9 +7,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import model.banco.ConnectionFactory;
+import connections.ConnectionFactory;
 import builder.EventoBuilder;
-import model.entidade.Evento;
+import java.sql.Statement;
+import entidade.Evento;
 
 /**
  * Essa classe implementa os metodos de consultas e inserções no Banco de Dados
@@ -18,7 +19,7 @@ import model.entidade.Evento;
  * @version 1.0
  * @since 26/mar/2017
  */
-public class EventoDAO extends ConnectionFactory implements InterfaceDAO<Object> {
+public class EventoDAO extends ConnectionFactory implements InterfaceDAO<Evento> {
 
     private PreparedStatement statement;//utlizado para preparar e executar a query.
     private ResultSet resultSet;//utlizado para armazenar o resultado da query. 
@@ -35,27 +36,39 @@ public class EventoDAO extends ConnectionFactory implements InterfaceDAO<Object>
      * tipo da classe
      */
     @Override
-    public void create(Object t) throws SQLException, ClassNotFoundException {
+    public Evento create(Evento evento) throws SQLException, ClassNotFoundException {
         try {
-            Evento evento = (Evento) t;//fazendo casting
 
-            sql = "INSERT INTO evento(tipo_evento,valor,nome,id_evento,faixaEtaria)Values(?,?,?,?,?);";
+            sql = "INSERT INTO evento(tipo_evento,valor,nome,faixaEtaria)Values(?,?,?,?);";
 
-            statement = getConnection().prepareStatement(sql);
+            statement = getConnection().prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
 
             statement.setString(1, evento.getTipo());//valor que será salvo na coluna  tipo_evento
             statement.setDouble(2, evento.getValor());//valor que será salvo na coluna valor
             statement.setString(3, evento.getNome());//valor que será salvo na coluna nome
-            statement.setInt(4, evento.getId_evento());//valor que será salvo na coluna id_evento. Essa coluna é uma PRIMARY KEY
-            statement.setInt(5, evento.getFaixaEtaria());//valor que será salvo na coluna faixa_etaria.
+//            statement.setInt(4, Statement.RETURN_GENERATED_KEYS);//valor que será salvo na coluna id_evento. Essa coluna é uma PRIMARY KEY
+            statement.setInt(4, evento.getFaixaEtaria());//valor que será salvo na coluna faixa_etaria.
 //            statement.setInt(6, evento.getId_usuario());//valor que sera salvo como id_usuario.  CHAVE ESTRANGEIRA
             statement.execute();//executando a instrução SQL.
+            
+            ResultSet resultSet = statement.getGeneratedKeys();
+            
+            if(resultSet.next()){
+              int id = resultSet.getInt(1);
+              String tipoEvento = resultSet.getString("tipo_evento");
+
+              return new EventoBuilder()
+                      .setId_evento(id)
+                      .setTipo(tipoEvento)
+                      .build();
+            }
 
         } catch (SQLException sqle) {
             throw new SQLException(sqle.getMessage() + " Houve um erro ao salvar o Evento");
         } catch (ClassNotFoundException cnfe) {
             throw new ClassNotFoundException(cnfe.getMessage() + " Houve um erro ao salvar o Evento");
         }
+        return null;
     }
 
     @Override
@@ -64,12 +77,12 @@ public class EventoDAO extends ConnectionFactory implements InterfaceDAO<Object>
     }
 
     @Override
-    public void upDate() {
+    public Evento upDate(Evento evento) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public Object findById(int id) throws Exception {
+    public Evento findById(int id) throws Exception {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

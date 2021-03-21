@@ -1,5 +1,6 @@
 package model.banco;
 
+import connections.ConnectionFactory;
 import java.sql.Connection;
 import static org.junit.Assert.*;
 import org.junit.Test;

@@ -1,6 +1,6 @@
 package controller.servlet;
 
-import controller.facade.UsuarioFacade;
+import service.UsuarioFacade;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;

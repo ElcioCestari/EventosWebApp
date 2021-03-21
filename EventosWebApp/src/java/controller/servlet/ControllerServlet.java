@@ -1,9 +1,9 @@
 
 package controller.servlet;
 
-import controller.facade.EnderecoFacade;
-import controller.facade.EventoFacade;
-import controller.facade.UsuarioFacade;
+import service.EnderecoFacade;
+import service.EventoFacade;
+import service.UsuarioFacade;
 import java.io.IOException;
 import java.rmi.AccessException;
 import javax.servlet.ServletException;

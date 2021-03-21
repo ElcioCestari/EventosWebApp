@@ -3,12 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package controller.facade;
+package service;
 
 import java.util.ArrayList;
 import javax.servlet.http.HttpServletRequest;
-import model.banco.dao.EnderecoDAO;
-import model.entidade.Endereco;
+import dao.EnderecoDAO;
+import entidade.Endereco;
 
 /**
  * Esta classe implementa os metodos para criação de um evento

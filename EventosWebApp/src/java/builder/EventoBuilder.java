@@ -1,6 +1,6 @@
 package builder;
 
-import model.entidade.Evento;
+import entidade.Evento;
 
 /**
  *

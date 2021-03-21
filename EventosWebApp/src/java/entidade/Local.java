@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package model.entidade;
+package entidade;
 
 /**
  * Classe que impemlementa a modelagem de um Local de um Evento

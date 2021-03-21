@@ -1,13 +1,13 @@
-package model.banco.dao;
+package dao;
 
-import model.banco.ConnectionFactory;
+import connections.ConnectionFactory;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import model.entidade.Usuario;
+import entidade.Usuario;
 
 /**
  * Classe que realiza as operações no banco de dados, tais como: create,
@@ -17,7 +17,7 @@ import model.entidade.Usuario;
  * @version 1.0
  * @since 13/mar/2017
  */
-public class UsuarioDAO extends ConnectionFactory implements InterfaceDAO {
+public class UsuarioDAO extends ConnectionFactory implements InterfaceDAO<Usuario> {
 
     private String sql = null;//sera a variavel que contera as instruções em sql
     private PreparedStatement statement = null;//prepara o SQL que será executado
@@ -42,10 +42,7 @@ public class UsuarioDAO extends ConnectionFactory implements InterfaceDAO {
      * @throws Exception - caso haja algum erro ao salvar no banco
      */
     @Override
-    public void create(Object object) throws Exception {
-
-        Usuario usuario = (Usuario) object;//casting 
-
+    public Usuario create(Usuario usuario) throws Exception {
         this.sql = "INSERT INTO usuario" + "(login, nome, idade, senha, id_usuario)" + "VALUES(?,?,?,?,?)";//operação que sera executa no banco
 
         try {
@@ -61,7 +58,6 @@ public class UsuarioDAO extends ConnectionFactory implements InterfaceDAO {
             statement.setInt(3, usuario.getIdade());
             statement.setString(4, usuario.getSenha());
             statement.setInt(5, usuario.getId_usuario());
-
         } catch (SQLException e) {
             throw new Exception("Erro ao configurar os parametros do usuario: " + e.getMessage());
         }
@@ -74,6 +70,7 @@ public class UsuarioDAO extends ConnectionFactory implements InterfaceDAO {
             statement.close();//encerra conexao
             getConnection().close();//encerra conexao
         }
+        return null;
     }
 
     @Override
@@ -82,7 +79,7 @@ public class UsuarioDAO extends ConnectionFactory implements InterfaceDAO {
     }
 
     @Override
-    public void upDate() {
+    public Usuario upDate(Usuario usuario) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

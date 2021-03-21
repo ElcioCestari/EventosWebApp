@@ -1,16 +1,11 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package controller.facade;
+package service;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
 import javax.servlet.http.HttpServletRequest;
-import model.banco.dao.LocalDAO;
-import model.entidade.Endereco;
-import model.entidade.Local;
+import dao.LocalDAO;
+import entidade.Endereco;
+import entidade.Local;
 
 /**
  *
@@ -19,7 +14,7 @@ import model.entidade.Local;
 public class LocalFacade {
 
     private static ArrayList<Local> listaDeLocais;
-    public void criarLocal(HttpServletRequest request, Endereco endereco) throws RuntimeException, ClassCastException, ClassNotFoundException, SQLException {
+    public void criarLocal(HttpServletRequest request, Endereco endereco) throws RuntimeException, ClassCastException, ClassNotFoundException, SQLException, Exception {
         Local local;
         int capacidade;
         String nome;
@@ -38,6 +33,5 @@ public class LocalFacade {
             listaDeLocais = new ArrayList<Local>();
         }
         listaDeLocais.add(local);
-
     }
 }

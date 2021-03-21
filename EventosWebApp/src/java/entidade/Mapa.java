@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package model.entidade;
+package entidade;
 
 /**
  * Essa classe implementa a modelagem de um mapa do Web Service Google Maps
