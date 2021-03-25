@@ -12,9 +12,9 @@ import util.enums.PathEnums;
  *
  * @author elciotaira
  */
-public class ImagemFacade {
+public class ImagemService {
     private ImagemEventoDAO imagemDAO;
-    public ImagemFacade() throws SQLException, ClassNotFoundException {
+    public ImagemService() throws SQLException, ClassNotFoundException {
         this.imagemDAO = new ImagemEventoDAO();
     }
     public Imagem salvarImagem(HttpServletRequest request, Evento evento) throws Exception {
@@ -32,8 +32,8 @@ public class ImagemFacade {
         img.setPath(configureImagemPath());
         return img;
     }
-    private void salvarNoBanco(Imagem img) throws Exception {
-        this.imagemDAO.create(img);
+    private Imagem salvarNoBanco(Imagem img) throws Exception {
+        return this.imagemDAO.create(img);
     }
 
     private String configureImagemPath() {

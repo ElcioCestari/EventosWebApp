@@ -9,7 +9,6 @@ package entidade;
  */
 public class Evento {
 
-    private static Integer incrementaId;
     private int id_evento;
     private String tipo;
     private String descricao;
@@ -18,18 +17,7 @@ public class Evento {
     private String nome;
     private int id_usuario;
 
-    /**
-     * Configura um objeto do tipo Evento com nenhum parametro apenas atribuindo a id_evento um inteiro positivo unico para cada instancia de um Evento
-     */
-    public Evento() {
-        if(incrementaId == null){
-            incrementaId = 1;
-        }
-        else{
-            incrementaId++;
-        }
-        this.setId_evento(incrementaId);
-    }
+    public Evento() {}
 
     /**
      * Configura um objeto do tipo Evento
@@ -80,8 +68,22 @@ public class Evento {
      */
     public Evento( String tipo, String descricao, double valor, int faixaEtaria, String nome, int id_usuario) {
         this(tipo,descricao,valor,faixaEtaria,nome);
-        this.setId_usuario(id_usuario);
-        
+        this.setId_usuario(id_usuario);   
+    }
+    
+        /**
+     * Configura um objeto Evento
+     * @param tipo  String
+     * @param descricao String
+     * @param valor double
+     * @param faixaEtaria   int
+     * @param nome  String
+     * @param id_usuario    int
+     * @param id_evento    int
+     */
+    public Evento( String tipo, String descricao, double valor, int faixaEtaria, String nome, int id_usuario, int id_evento) {
+        this(tipo,descricao,valor,faixaEtaria,nome,id_usuario);
+        this.setId_evento(id_evento);
     }
     
     /**

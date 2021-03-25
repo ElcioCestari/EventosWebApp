@@ -1,6 +1,7 @@
 package controller.servlet;
 
-import service.EventoFacade;
+import static com.sun.corba.se.impl.util.Utility.printStackTrace;
+import entidade.Evento;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -11,7 +12,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import entidade.Evento;
+import service.EventoService;
 
 /**
  *
@@ -21,7 +22,7 @@ import entidade.Evento;
 public class CadastrarEventoServlet extends HttpServlet {
 
     private static final String TITULO_DA_PAGINA = "/CadastrarEvento";
-    private EventoFacade eventoFacade;
+    private EventoService eventoService;
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -30,13 +31,12 @@ public class CadastrarEventoServlet extends HttpServlet {
             return;
         }
         try {
-            eventoFacade = new EventoFacade();
-            Evento evento = this.eventoFacade.criarEvento(request);
+            eventoService = new EventoService();
+            Evento evento = this.eventoService.criarEvento(request);
             request.setAttribute("resultado", "evento cadastrado com sucesso!");
             response.sendRedirect(request.getContextPath() + "/home");
         } catch (Exception ex) {
-            Logger.getLogger(CadastrarEventoServlet.class.getName()).log(Level.SEVERE, null, ex);
-            request.setAttribute("resultado", ex.getMessage().toString());
+            request.setAttribute("error", "Não foi possível salvar o evento, tente novamente ou mais tarde.");
             request.getRequestDispatcher("cadastrar_evento.jsp").forward(request, response);
         }
     }

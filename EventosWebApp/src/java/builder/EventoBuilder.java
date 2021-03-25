@@ -9,7 +9,6 @@ import entidade.Evento;
  */
 public class EventoBuilder{
 
-    private static Integer incrementaId;
     private int id_evento;
     private String tipo;
     private String descricao;
@@ -18,10 +17,6 @@ public class EventoBuilder{
     private String nome;
     private int id_usuario;
 
-    public EventoBuilder setIncrementaId(Integer incrementaId) {
-        EventoBuilder.incrementaId = incrementaId;
-        return this;
-    }
     public EventoBuilder setId_evento(int id_evento) {
         this.id_evento = id_evento;
         return this;
@@ -51,7 +46,7 @@ public class EventoBuilder{
         return this;
     }
     public Evento build(){
-        return new Evento(tipo, descricao, valor, faixaEtaria, nome, id_usuario);
+        return new Evento(tipo, descricao, valor, faixaEtaria, nome, id_usuario, id_evento);
     }
     
 }

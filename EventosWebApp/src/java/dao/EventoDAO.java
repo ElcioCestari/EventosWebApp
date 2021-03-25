@@ -1,16 +1,20 @@
 package dao;
 
+import exceptions.EntityNotFoundException;
+import builder.EventoBuilder;
+import static com.sun.corba.se.impl.util.Utility.printStackTrace;
+import connections.ConnectionFactory;
+import dao.util.enums.EventoColumnsNameEnum;
+import dao.util.enums.NomeTabelaEnum;
+import entidade.Evento;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import connections.ConnectionFactory;
-import builder.EventoBuilder;
-import java.sql.Statement;
-import entidade.Evento;
 
 /**
  * Essa classe implementa os metodos de consultas e inserções no Banco de Dados
@@ -21,27 +25,21 @@ import entidade.Evento;
  */
 public class EventoDAO extends ConnectionFactory implements InterfaceDAO<Evento> {
 
-    private PreparedStatement statement;//utlizado para preparar e executar a query.
-    private ResultSet resultSet;//utlizado para armazenar o resultado da query. 
-    private String sql;//String com a instrução sql que devera ser realizada.
-
     /**
-     * Metodo que recebe um Object que deve ser uma instancia de Evento, pois
-     * sera feito o casting nesse metodo. E salva-o no banco na tabela evento
+     * Metodo que recebe um evento para criar e salvar no banco
      *
-     * @param t Objeto que deve ser do tipo Evento
+     * @param evento
      * @throws SQLException Caso haja algum erro ao tentar acessar ou salvar no
      * banco
      * @throws ClassNotFoundException Caso haja algum erro em instanciar a o
      * tipo da classe
      */
     @Override
-    public Evento create(Evento evento) throws SQLException, ClassNotFoundException {
+    public Evento create(Evento evento) {
         try {
+            String sql = "INSERT INTO evento(tipo_evento,valor,nome,faixaEtaria)Values(?,?,?,?);";
 
-            sql = "INSERT INTO evento(tipo_evento,valor,nome,faixaEtaria)Values(?,?,?,?);";
-
-            statement = getConnection().prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
+            PreparedStatement statement = getConnection().prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
 
             statement.setString(1, evento.getTipo());//valor que será salvo na coluna  tipo_evento
             statement.setDouble(2, evento.getValor());//valor que será salvo na coluna valor
@@ -50,24 +48,20 @@ public class EventoDAO extends ConnectionFactory implements InterfaceDAO<Evento>
             statement.setInt(4, evento.getFaixaEtaria());//valor que será salvo na coluna faixa_etaria.
 //            statement.setInt(6, evento.getId_usuario());//valor que sera salvo como id_usuario.  CHAVE ESTRANGEIRA
             statement.execute();//executando a instrução SQL.
-            
-            ResultSet resultSet = statement.getGeneratedKeys();
-            
-            if(resultSet.next()){
-              int id = resultSet.getInt(1);
-              String tipoEvento = resultSet.getString("tipo_evento");
 
-              return new EventoBuilder()
-                      .setId_evento(id)
-                      .setTipo(tipoEvento)
-                      .build();
+            ResultSet resultSet = statement.getGeneratedKeys();
+
+            if (resultSet.next()) {
+                int id = resultSet.getInt(1);
+                return this.findById(id);
             }
 
-        } catch (SQLException sqle) {
-            throw new SQLException(sqle.getMessage() + " Houve um erro ao salvar o Evento");
-        } catch (ClassNotFoundException cnfe) {
-            throw new ClassNotFoundException(cnfe.getMessage() + " Houve um erro ao salvar o Evento");
-        }
+        } catch (SQLException | ClassNotFoundException sqle) {
+            Logger.getLogger(EventoDAO.class.getName()).log(Level.SEVERE, null, sqle);
+            return null;
+        } catch (Exception ex) {
+            Logger.getLogger(EventoDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } 
         return null;
     }
 
@@ -83,17 +77,37 @@ public class EventoDAO extends ConnectionFactory implements InterfaceDAO<Evento>
 
     @Override
     public Evento findById(int id) throws Exception {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        String sql = "SELECT * FROM " + NomeTabelaEnum.EVENTO + " WHERE " + EventoColumnsNameEnum.ID_EVENTO.value + "  = ? ;";
+        PreparedStatement statement = getConnection().prepareStatement(sql);
+        statement.setInt(1, id);
+        
+        ResultSet resultSet = statement.executeQuery();
+        
+        if(resultSet == null) throw new EntityNotFoundException(Integer.valueOf(id).toString());
+        
+        Evento evento = null;
+        while (resultSet.next()) {
+            evento = new EventoBuilder()
+                    .setDescricao(resultSet.getString(EventoColumnsNameEnum.DESCRICAO.value))
+                    .setFaixaEtaria(resultSet.getInt(EventoColumnsNameEnum.FAIXA_ETARIA.value))
+                    .setId_evento(resultSet.getInt(EventoColumnsNameEnum.ID_EVENTO.value))
+                    .setId_usuario(resultSet.getInt(EventoColumnsNameEnum.ID_USUARIO.value))
+                    .setNome(resultSet.getString(EventoColumnsNameEnum.NOME.value))
+                    .setTipo(resultSet.getString(EventoColumnsNameEnum.TIPO_EVENTO.value))
+                    .setValor(resultSet.getDouble(EventoColumnsNameEnum.VALOR.value))
+                    .build();
+        }
+        return evento;
     }
 
-    public List<Evento> selectAll(){
+    public List<Evento> selectAll() {
         List<Evento> list = new ArrayList<>();
         String sql = "SELECT * FROM evento;";
         try {
-            statement = getConnection().prepareStatement(sql);
-            resultSet = statement.executeQuery();
-            
-            while (resultSet.next()) {               
+            PreparedStatement statement = getConnection().prepareStatement(sql);
+            ResultSet resultSet = statement.executeQuery();
+
+            while (resultSet.next()) {
                 String tipo = resultSet.getString("tipo_evento");
                 String descricao = resultSet.getString("descricao");
                 double valor = resultSet.getDouble("valor");
@@ -113,18 +127,16 @@ public class EventoDAO extends ConnectionFactory implements InterfaceDAO<Evento>
             Logger.getLogger(EventoDAO.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(EventoDAO.class.getName()).log(Level.SEVERE, null, ex);
-        } finally{
-            try {
-                if(statement != null) statement.close();
-            } catch (SQLException ex) {
-                Logger.getLogger(EventoDAO.class.getName()).log(Level.SEVERE, null, ex);
-            }
         }
         return list;
     }
+
     /**
      * Seleciona todos os Eventos que estão no banco e os adiciona à list
-     * @deprecated - Este metodo foi depreciado pois, apos analise, identificou-se que nao fazia sentido um selectall passando uma list como atributo.
+     *
+     * @deprecated - Este metodo foi depreciado pois, apos analise,
+     * identificou-se que nao fazia sentido um selectall passando uma list como
+     * atributo.
      * @see - <code>selectAll()</code>
      * @param list um ArrayList que será utlizado para armazenar todos os
      * Eventos salvos no banco
@@ -142,9 +154,9 @@ public class EventoDAO extends ConnectionFactory implements InterfaceDAO<Evento>
         }
 
         try {
-            sql = "SELECT * FROM evento;";//String para a instrução que selecionará todos os atributos de um evento no banco
-            statement = getConnection().prepareStatement(sql);//estabelece a conecxão com o banco e prepara a instrução sql que será executada
-            resultSet = statement.executeQuery();// executa a  query
+            String sql = "SELECT * FROM evento;";//String para a instrução que selecionará todos os atributos de um evento no banco
+            PreparedStatement statement = getConnection().prepareStatement(sql);//estabelece a conecxão com o banco e prepara a instrução sql que será executada
+            ResultSet resultSet = statement.executeQuery();// executa a  query
             while (resultSet.next()) {//enquanto houver linhas sendo retornadas da consulta sql...
                 boolean eventoEstaNaLista = false;//sera configurada com true se houver um evento na lista
                 for (int i = 0; i < list.size(); i++) {//percorre a toda a lista 
@@ -166,14 +178,7 @@ public class EventoDAO extends ConnectionFactory implements InterfaceDAO<Evento>
             }//fim do while
         } catch (Exception e) {
             throw new RuntimeException("Ocorreu um erro ao buscar a lista de eventos: " + e.getMessage());
-        } finally {
-            try {
-                statement.close();
-                resultSet.close();
-            } catch (SQLException e) {
-                throw new RuntimeException(e.getMessage());
-            }
-        }
+        } 
         return list;
     }//fim do método 
 
@@ -187,8 +192,8 @@ public class EventoDAO extends ConnectionFactory implements InterfaceDAO<Evento>
      */
     public Evento getById(int id) throws RuntimeException {
         Evento evento = null;
-        sql = "SELECT * FROM evento WHERE id_evento = " + id + ";";
-        conectsAndExecutes(sql);
+        String sql = "SELECT * FROM evento WHERE id_evento = " + id + ";";
+        ResultSet resultSet = conectsAndExecutes(sql);
         try {
             while (resultSet.next()) {
                 evento = new Evento(resultSet.getString("tipo_evento"),
@@ -201,9 +206,7 @@ public class EventoDAO extends ConnectionFactory implements InterfaceDAO<Evento>
             }
         } catch (SQLException ex) {
             throw new RuntimeException("Ocorreu um erro ao buscar o evento: " + ex.getMessage());
-        } finally {
-            endConnection();
-        }
+        } 
         return evento;
     }
 
@@ -213,26 +216,31 @@ public class EventoDAO extends ConnectionFactory implements InterfaceDAO<Evento>
      * @param sql a instrução sql que será executada no banco
      * @throws RuntimeException caso ocorra um erro no banco
      */
-    private void conectsAndExecutes(String sql) throws RuntimeException {
+    private ResultSet conectsAndExecutes(String sql) throws RuntimeException {
+        ResultSet resultSet = null;
         try {
-            statement = getConnection().prepareStatement(sql);
+            PreparedStatement statement = getConnection().prepareStatement(sql);
             resultSet = statement.executeQuery();
         } catch (ClassNotFoundException | SQLException ex) {
             throw new RuntimeException("Ocorreu um erro ao realizar a pesquisa no banco: " + ex.getMessage());
         }
+        return resultSet;
     }
 
     /**
      * Finaliza a conexão com o banco
+     * @deprecated - este metodo foi depreciado pois não estou mais utilizando. Estou revendo esta funcionalidade do código
+     * TODO
      */
     private void endConnection() {
 
-        try {
-            statement.close();
-            resultSet.close();
-        } catch (SQLException ex) {
-            Logger.getLogger(UsuarioDAO.class.getName()).log(Level.SEVERE, null, ex);
-        }
+//        //TODO
+//        try {
+////            statement.close();
+////            resultSet.close();
+//        } catch (SQLException ex) {
+//            Logger.getLogger(UsuarioDAO.class.getName()).log(Level.SEVERE, null, ex);
+//        }
     }
 
 }

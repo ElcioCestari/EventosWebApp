@@ -1,6 +1,6 @@
 package controller.servlet;
 
-import service.EventoFacade;
+import service.EventoService;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
@@ -21,12 +21,12 @@ import entidade.Evento;
 @WebServlet(name = "HomeServlet", urlPatterns = {"/home"})
 public class HomeServlet extends HttpServlet {
     private static final String TITULO_DA_PAGINA = "/home";
-    private EventoFacade eventoFacade;
+    private EventoService eventoFacade;
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try {
-            eventoFacade = new EventoFacade();
+            eventoFacade = new EventoService();
         } catch (SQLException ex) {
             Logger.getLogger(HomeServlet.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ClassNotFoundException ex) {

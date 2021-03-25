@@ -2,7 +2,7 @@
 package controller.servlet;
 
 import service.EnderecoFacade;
-import service.EventoFacade;
+import service.EventoService;
 import service.UsuarioFacade;
 import java.io.IOException;
 import java.rmi.AccessException;
@@ -45,13 +45,13 @@ public class ControllerServlet extends HttpServlet {
 
             } else if (request.getRequestURI().endsWith("/Home")) {//Requisição feita para acessar a JSP home
                 request.setAttribute("tituloDaPagina", "Home");
-                request.setAttribute("listaDeEventos", new EventoFacade().getListaDeEventos());
+                request.setAttribute("listaDeEventos", new EventoService().getListaDeEventos());
                 jsp = "home.jsp";
 
             } else if (request.getRequestURI().endsWith("/Evento")) {//Requisição feita para acessar a JSP EVENTO
                 verificaAutorizacao(request);
                 request.setAttribute("tituloDaPagina", "Evento");
-                request.setAttribute("evento", new EventoFacade().getEventoById(request));//buscanco o evento que o usuario clicou
+                request.setAttribute("evento", new EventoService().getEventoById(request));//buscanco o evento que o usuario clicou
                 jsp = "evento.jsp";
 
             } else if (request.getRequestURI().endsWith("/LoginPage")) {//Requisição feita para acessar a JSP LOGIN
@@ -87,7 +87,7 @@ public class ControllerServlet extends HttpServlet {
 
             } else if (request.getRequestURI().endsWith("/salvarEvento")) {//Requisição feita na jsp cadastrar_evento.jsp e eh serva para salvar um vento no banco
                 verificaAutorizacao(request);//verifica autorização
-                new EventoFacade().criarEvento(request);//cria um evento
+                new EventoService().criarEvento(request);//cria um evento
                 request.setAttribute("mensagem", "Evento salvo com sucesso!");
                 jsp = "mensagem.jsp";
 

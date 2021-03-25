@@ -17,15 +17,15 @@ import entidade.Usuario;
  *
  * @author Elcio Cestari Taira
  */
-public class EventoFacade {
+public class EventoService {
 
     private static ArrayList<Evento> listaDeEventos;
     private EventoDAO eventoDAO;
-    private ImagemFacade imagemFacade;
+    private ImagemService imagemService;
 
-    public EventoFacade() throws SQLException, ClassNotFoundException {
+    public EventoService() throws SQLException, ClassNotFoundException {
         this.eventoDAO = new EventoDAO();
-        this.imagemFacade = new ImagemFacade();
+        this.imagemService = new ImagemService();
     }
 
     /**
@@ -49,16 +49,16 @@ public class EventoFacade {
      */
     public Evento criarEvento(HttpServletRequest request) throws Exception {
         try {
-            Evento evento = mapRequestToEvento(request);
-            this.eventoDAO.create(evento);
-            Imagem img = this.imagemFacade.salvarImagem(request, evento);
+            Evento eventoToSave = mapRequestToEvento(request);
+            Evento eventoSaved = this.eventoDAO.create(eventoToSave);
+            Imagem img = this.imagemService.salvarImagem(request, eventoSaved);
 
 //            //estou tendo problemas aqui, pois o listaDeEventos ta null mas não ta entrando no if
 //            if (listaDeEventos == null) {
 //                listaDeEventos = new ArrayList<>();
 //            }
 //            listaDeEventos.add(evento);
-            return evento;
+            return eventoSaved;
 
         } catch (ClassCastException e) {
             e.printStackTrace();
@@ -153,7 +153,6 @@ public class EventoFacade {
         int faixaEtaria = Integer.parseInt(request.getParameter("faixaEtaria"));//Fazendo casting. throw ClassCastException
         
 //            Usuario usuario = (Usuario) request.getSession().getAttribute("usuario");//problema esta aqui
-//            Evento evento = new Evento(tipo, descricao, valor, faixaEtaria, nomeEvento, usuario.getId_usuario());
         Evento evento = new EventoBuilder()
                 .setDescricao(descricao)
                 .setFaixaEtaria(faixaEtaria)
