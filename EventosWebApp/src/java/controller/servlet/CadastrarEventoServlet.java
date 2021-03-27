@@ -1,10 +1,7 @@
 package controller.servlet;
 
-import static com.sun.corba.se.impl.util.Utility.printStackTrace;
 import entidade.Evento;
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -36,7 +33,7 @@ public class CadastrarEventoServlet extends HttpServlet {
             request.setAttribute("resultado", "evento cadastrado com sucesso!");
             response.sendRedirect(request.getContextPath() + "/home");
         } catch (Exception ex) {
-            request.setAttribute("error", "Não foi possível salvar o evento, tente novamente ou mais tarde.");
+            request.setAttribute("error", "Ocorreu o seguinte erro: " + ex.getLocalizedMessage() + "Não foi possível salvar o evento, tente novamente ou mais tarde. " );
             request.getRequestDispatcher("cadastrar_evento.jsp").forward(request, response);
         }
     }

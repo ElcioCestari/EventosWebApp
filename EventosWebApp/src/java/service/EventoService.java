@@ -53,11 +53,6 @@ public class EventoService {
             Evento eventoSaved = this.eventoDAO.create(eventoToSave);
             Imagem img = this.imagemService.salvarImagem(request, eventoSaved);
 
-//            //estou tendo problemas aqui, pois o listaDeEventos ta null mas não ta entrando no if
-//            if (listaDeEventos == null) {
-//                listaDeEventos = new ArrayList<>();
-//            }
-//            listaDeEventos.add(evento);
             return eventoSaved;
 
         } catch (ClassCastException e) {
