@@ -16,7 +16,7 @@
         </nav>
         <br><br><br><br>
         <section class="container formulario">
-            <form class="col-md-6" action="${pageContext.request.contextPath}/CadastrarEvento" method="post" autocomplete="on">
+            <form class="col-md-6" action="${pageContext.request.contextPath}/CadastrarEvento" method="post" autocomplete="on" enctype="multipart/form-data">
                 <%@include file="body/section/form/evento.jsp" %>
                 <%--<%@include file="body/section/form/local.jsp" %>--%>
                 <%--<%@include file="body/section/form/endereco.jsp" %>--%>
