@@ -5,7 +5,7 @@ package util.enums;
  * @author elciotaira
  */
 public enum PathEnums {
-    PATH("C:\\Users\\LENOVO\\Desktop\\workspace\\estudos\\EventosWebApp");
+    PATH("C:\\Users\\LENOVO\\Desktop\\workspace\\estudos\\EventosWebApp\\EventosWebApp\\src\\img");    
     
     public String value;
 

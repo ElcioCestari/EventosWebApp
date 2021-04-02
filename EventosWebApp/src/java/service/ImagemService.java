@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.Part;
 import util.enums.PathEnums;
 
+
 /**
  *
  * @author elciotaira
@@ -40,15 +41,18 @@ public class ImagemService {
         Imagem img = null;
         try {
             filePart = request.getPart("nomeImagem");
-            final String fileName = filePart.getName();
+//            final String fileName = filePart.getName();
+            final String fileName = filePart.getSubmittedFileName();
             final String path = configureImagemPath(fileName);
             img = new Imagem();
             img.setNome(fileName);
             img.setPath(path);
         } catch (IOException ex) {
             Logger.getLogger(ImagemService.class.getName()).log(Level.SEVERE, null, ex);
+            throw new RuntimeException("erro ao salvar a imagem " + ex.getMessage());
         } catch (ServletException ex) {
             Logger.getLogger(ImagemService.class.getName()).log(Level.SEVERE, null, ex);
+            throw new RuntimeException("erro ao salvar a imagem " + ex.getMessage());
         }
         return img;
     }
@@ -99,8 +103,9 @@ public class ImagemService {
             }
             Logger.getLogger(Level.INFO + "imagem salva com sucesso");
         } catch (Exception e) {
-            Logger.getLogger(Level.WARNING + e.getMessage());
-            throw new RuntimeException("erro ao salvar a imagem do evento");
+            Logger.getLogger(Level.WARNING + e.getMessage()).log(Level.SEVERE, e.getMessage());
+            
+            throw new RuntimeException("ocorreu um erro ao salvar a imagem: " + e.getMessage());
         }
 
     }

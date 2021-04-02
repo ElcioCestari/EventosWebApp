@@ -1,5 +1,7 @@
 package entidade;
 
+import java.util.List;
+
 /**
  * Essa classe modela os metodos e atributos que um evento deve possuir
  *
@@ -16,6 +18,7 @@ public class Evento {
     private int faixaEtaria;
     private String nome;
     private int id_usuario;
+    private List<Imagem> listImagem; 
 
     public Evento() {}
 
@@ -85,6 +88,19 @@ public class Evento {
         this(tipo,descricao,valor,faixaEtaria,nome,id_usuario);
         this.setId_evento(id_evento);
     }
+
+    public Evento(String tipo, String descricao, double valor, int faixaEtaria, String nome, int id_usuario, int eventoId, List<Imagem> listImagem) {
+        this.tipo = tipo;
+        this.descricao = descricao;
+        this.valor = valor;
+        this.faixaEtaria = faixaEtaria;
+        this.nome = nome;
+        this.id_usuario = id_usuario;
+        this.id_evento = eventoId;
+        this.listImagem = listImagem;
+    }
+    
+    
     
     /**
      * Retorna a faixa etaria
@@ -209,4 +225,10 @@ public class Evento {
         this.id_usuario = id_usuario;
     }
 
+    public List<Imagem> getListImagem() {
+        return listImagem;
+    }
+    public void setListImagem(List<Imagem> listImagem) {
+        this.listImagem = listImagem;
+    }
 }

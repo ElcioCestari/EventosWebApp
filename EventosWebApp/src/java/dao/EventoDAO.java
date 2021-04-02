@@ -24,6 +24,16 @@ import java.util.logging.Logger;
  * @since 26/mar/2017
  */
 public class EventoDAO extends ConnectionFactory implements InterfaceDAO<Evento> {
+    
+    private ImagemEventoDAO imagemEventoDAO;
+
+    public EventoDAO(ImagemEventoDAO imagemEventoDAO) {
+        this.imagemEventoDAO = imagemEventoDAO;
+    }
+
+    public EventoDAO() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 
     /**
      * Metodo que recebe um evento para criar e salvar no banco
@@ -120,6 +130,7 @@ public class EventoDAO extends ConnectionFactory implements InterfaceDAO<Evento>
                         .setId_evento(id_evento)
                         .setNome(nome)
                         .setValor(valor)
+                        .setImagemList(this.imagemEventoDAO.findByFkEvento(id_evento))
                         .build();
                 list.add(evento);//adicionando Evento recem criado à list
             }

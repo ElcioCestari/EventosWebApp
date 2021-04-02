@@ -10,7 +10,7 @@
         <c:forEach var="evento" items="${listEventos}">
             <section class="card evento-card" >
                 <div class="card-img-top">
-                    <img src="http://www.estadosecapitaisdobrasil.com/wp-content/uploads/2014/11/monumento-cavaleiro-guaicuru-parque-das-nacoes-indigenas-campo-grande-1024x685.jpg" alt="foto do evento" class="img-rounded" width="280" height="210">
+                    <img src="${evento.listImagem}" alt="foto do evento" class="img-rounded" width="280" height="210">
                 </div>
                 <div class="card-body"> 
                     <h3 class="card-title">${evento.nome}</h3>

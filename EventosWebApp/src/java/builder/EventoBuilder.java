@@ -1,6 +1,8 @@
 package builder;
 
 import entidade.Evento;
+import entidade.Imagem;
+import java.util.List;
 
 /**
  *
@@ -16,6 +18,7 @@ public class EventoBuilder{
     private int faixaEtaria;
     private String nome;
     private int id_usuario;
+    private List<Imagem> listImagem;
 
     public EventoBuilder setId_evento(int id_evento) {
         this.id_evento = id_evento;
@@ -45,8 +48,12 @@ public class EventoBuilder{
         this.id_usuario = id_usuario;
         return this;
     }
+    public EventoBuilder setImagemList(List listImagem){
+        this.listImagem = listImagem;
+        return this;
+    }
     public Evento build(){
-        return new Evento(tipo, descricao, valor, faixaEtaria, nome, id_usuario, id_evento);
+        return new Evento(tipo, descricao, valor, faixaEtaria, nome, id_usuario, id_evento, listImagem);
     }
     
 }

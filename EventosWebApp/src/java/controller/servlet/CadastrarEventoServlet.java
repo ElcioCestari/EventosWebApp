@@ -35,7 +35,7 @@ public class CadastrarEventoServlet extends HttpServlet {
             request.setAttribute("resultado", "evento cadastrado com sucesso!");
             response.sendRedirect(request.getContextPath() + "/home");
         } catch (Exception ex) {
-            request.setAttribute("error", "Ocorreu o seguinte erro: " + ex.getLocalizedMessage() + "Não foi possível salvar o evento, tente novamente ou mais tarde. " );
+            request.setAttribute("error", "Ocorreu o seguinte erro: " + ex.getMessage() + "Não foi possível salvar o evento, tente novamente ou mais tarde. " );
             request.getRequestDispatcher("cadastrar_evento.jsp").forward(request, response);
         }
     }

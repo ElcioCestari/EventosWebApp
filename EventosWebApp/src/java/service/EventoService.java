@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import dao.EventoDAO;
+import dao.ImagemEventoDAO;
 import entidade.Evento;
 import entidade.Imagem;
 import entidade.Usuario;
@@ -24,7 +25,7 @@ public class EventoService {
     private ImagemService imagemService;
 
     public EventoService() throws SQLException, ClassNotFoundException {
-        this.eventoDAO = new EventoDAO();
+        this.eventoDAO = new EventoDAO(new ImagemEventoDAO());
         this.imagemService = new ImagemService();
     }
 

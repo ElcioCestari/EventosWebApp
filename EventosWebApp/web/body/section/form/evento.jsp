@@ -6,10 +6,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <fieldset><legend><strong>Detalhes do evento:</strong></legend>
-    <c:set var="error" scope="session" value="${param.error}"/>  
-    <c:if test="${error != null}">
-        <script>alert(${resultado} + " " + ${error})</script>
-    </c:if> 
+
     <div class="form-group">
         <label for="nomeEvento">Nome:</label>
         <input type="text" class="form-control" id="nomeEvento" name="nomeEvento" placeholder="Nome de Evento" size="40" required>
@@ -34,4 +31,10 @@
         <label for="imagem">Imagem do Evento</label>
         <input type="file" class="form-control" id="nomeImagem" name="nomeImagem" placeholder="Foto para divulgação" required accept="image/*">
     </div>
+    <div>
+        <c:set var="error" scope="session" value="${param.error}"/>  
+        <c:if test="${error != null}">
+            <div class="alert alert-danger"> <c:out value="${error})"/> </div>
+        </c:if>
+    </div> 
 </fieldset>

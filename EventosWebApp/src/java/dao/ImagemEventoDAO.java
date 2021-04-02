@@ -2,6 +2,7 @@ package dao;
 
 import com.mysql.cj.protocol.Resultset;
 import connections.ConnectionFactory;
+import dao.util.enums.ImagemEventoColumnsNameEnum;
 import dao.util.enums.NomeTabelaEnum;
 import entidade.Imagem;
 import java.sql.Connection;
@@ -9,6 +10,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -59,6 +62,7 @@ public class ImagemEventoDAO implements InterfaceDAO<Imagem> {
     public Imagem findById(int id) throws SQLException {
         String query = "SELECT * FROM " + tabela + " WHERE id = ?;";
         PreparedStatement statement = this.con.prepareStatement(query);
+        statement.setInt(1, id);
         ResultSet result = statement.executeQuery();
 
         Imagem img = new Imagem();
@@ -71,4 +75,26 @@ public class ImagemEventoDAO implements InterfaceDAO<Imagem> {
         return img;
     }
 
+    public List<Imagem> findByFkEvento(Integer fkEvento) throws SQLException {
+        String sql = "SELECT * FROM " + tabela + " WHERE " + ImagemEventoColumnsNameEnum.FK_EVENTO.value + " = ?;";
+        List<Imagem> imagens = new ArrayList<>();
+        Imagem img = null;
+        try {
+            PreparedStatement preparedStatement = this.con.prepareStatement(sql);
+            preparedStatement.setInt(1, fkEvento);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while(resultSet.next()){
+                img = new Imagem();
+                img.setId(resultSet.getInt(ImagemEventoColumnsNameEnum.ID.value));
+                img.setFk_evento(resultSet.getInt(ImagemEventoColumnsNameEnum.FK_EVENTO.value));
+                img.setNome(resultSet.getString(ImagemEventoColumnsNameEnum.NOME.value));
+                img.setPath(resultSet.getString(ImagemEventoColumnsNameEnum.PATH.value));
+                imagens.add(img);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(ImagemEventoDAO.class.getName()).log(Level.SEVERE, null, ex);
+            throw new SQLException(ex.getMessage());
+        }
+        return imagens;
+    }
 }
