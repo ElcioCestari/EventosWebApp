@@ -10,15 +10,14 @@
         <c:forEach var="evento" items="${listEventos}">
             <section class="card evento-card" >
                 <div class="card-img-top">
-                    <img src="${evento.listImagem}" alt="foto do evento" class="img-rounded" width="280" height="210">
+                    <img src="${pageContext.request.contextPath}/ExibirImagemServlet?img_path=${evento.listImagem[0].path}" alt="foto do evento" class="img-rounded" width="280" height="210">
                 </div>
                 <div class="card-body"> 
                     <h3 class="card-title">${evento.nome}</h3>
                     <p class="card-text">${evento.descricao}</p>
                     <p><bold>Faixa etaria</bold>: ${evento.faixaEtaria}</p>
                     <p><bold>Valor</bold>: R$ ${evento.valor}</p>
-                    <a class="btn btn-primary" href="${pageContext.request.contextPath}/Evento?id=${evento.id_evento}">info</a>
-                    
+                    <a class="btn btn-primary" href="${pageContext.request.contextPath}/Evento?id=${evento.id_evento}">info</a>      
                 </div>
             </section> 
         </c:forEach>
