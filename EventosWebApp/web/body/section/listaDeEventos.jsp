@@ -17,7 +17,7 @@
                     <p class="card-text">${evento.descricao}</p>
                     <p><bold>Faixa etaria</bold>: ${evento.faixaEtaria}</p>
                     <p><bold>Valor</bold>: R$ ${evento.valor}</p>
-                    <a class="btn btn-primary" href="${pageContext.request.contextPath}/Evento?id=${evento.id_evento}">info</a>      
+                    <a class="btn btn-primary" href="${pageContext.request.contextPath}/evento_detalhado?id=${evento.id_evento}">info</a>      
                 </div>
             </section> 
         </c:forEach>
