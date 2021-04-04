@@ -20,7 +20,9 @@ import javax.servlet.http.HttpServletResponse;
  * @author Elcio Cestari Taira
  * @version 1.0
  * @since 20/mar/2017
+ * @deprecated - essta classe foi deprecidada devido a restruturação de projeto. Veja outros Servlets para utilizar as funcionalidades do sistema
  */
+@Deprecated
 @WebServlet(name = "ControllerServlet", urlPatterns = {"/ControllerServlet"})
 public class ControllerServlet extends HttpServlet {
 
@@ -42,7 +44,7 @@ public class ControllerServlet extends HttpServlet {
             } else if (request.getRequestURI().endsWith("/Evento")) {//Requisição feita para acessar a JSP EVENTO
                 verificaAutorizacao(request);
                 request.setAttribute("tituloDaPagina", "Evento");
-                request.setAttribute("evento", new EventoService().getEventoById(request));//buscanco o evento que o usuario clicou
+//                request.setAttribute("evento", new EventoService().getEventoById(request));//buscanco o evento que o usuario clicou
                 jsp = "evento.jsp";
 
             } else if (request.getRequestURI().endsWith("/LoginPage")) {//Requisição feita para acessar a JSP LOGIN

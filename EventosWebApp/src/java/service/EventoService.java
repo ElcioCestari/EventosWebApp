@@ -9,7 +9,6 @@ import dao.EventoDAO;
 import dao.ImagemEventoDAO;
 import entidade.Evento;
 import entidade.Imagem;
-import entidade.Usuario;
 
 /**
  * Essa classe prove uma abstração maior para poder acessar os recursos que são
@@ -23,9 +22,11 @@ public class EventoService {
     private static ArrayList<Evento> listaDeEventos;
     private EventoDAO eventoDAO;
     private ImagemService imagemService;
+    private ImagemEventoDAO imagemEventoDAO;
 
     public EventoService() throws SQLException, ClassNotFoundException {
-        this.eventoDAO = new EventoDAO(new ImagemEventoDAO());
+        this.imagemEventoDAO = new ImagemEventoDAO();
+        this.eventoDAO = new EventoDAO(this.imagemEventoDAO);
         this.imagemService = new ImagemService();
     }
 
@@ -76,30 +77,26 @@ public class EventoService {
      * Configura uma ArrayList com todos os Eventos que tem no banco
      */
     public void setListaDeEventos() {
-        listaDeEventos = new EventoDAO().selectAll(listaDeEventos);
+        listaDeEventos = this.eventoDAO.selectAll(listaDeEventos);
     }
 
     /**
      * Busca um evento no banco
      *
-     * @param request será utilizado para acessar o id no banco, o parametro do
-     * request utlizado é o HttpServletRequest.getParameter("id")
+     * @param Integer será utilizado para acessar o id no banco request utlizado
+     * é o HttpServletRequest.getParameter("id")
      * @return Evento
      * @throws RuntimeException caso não seja possivel fazer o casting do
      * request.getParameter("id") para int
      */
-    public Evento getEventoById(HttpServletRequest request) throws RuntimeException {
+    public Evento getEventoById(Integer eventoId) throws RuntimeException {
+        if (eventoId == null) {
+            throw new IllegalArgumentException("O id do evento não pode ser nulo");
+        }
         Evento evento = null;
         try {
-            int id = Integer.parseInt((String) request.getParameter("id"));//pode gerar exceção
-            evento = getEventoByIdInTheList(id);//pegando o evento no arraylist
-            if (evento != null) {//o evento esta na lista
-                return evento;
-            } else {//o evento não esta na lista
-                evento = getEventoByIdInTheBase(id);//buscanco o evento no banco . . .
-            }
-
-        } catch (ClassCastException e) {
+            evento = getEventoByIdInTheBase(eventoId);//buscanco o evento no banco ...
+        } catch (RuntimeException e) {
             throw new RuntimeException("O id do evento deve ser um numero. Erro: " + e.getMessage());
         }
         return evento;
@@ -128,7 +125,7 @@ public class EventoService {
      * @throws RuntimeException lançada pelo DAO
      */
     public Evento getEventoByIdInTheBase(int id) throws RuntimeException {
-        return new EventoDAO().getById(id);
+        return this.eventoDAO.getById(id);
     }
 
     /**
@@ -137,7 +134,7 @@ public class EventoService {
      * @throws RuntimeException caso o corra algum erro no EventoDAO
      */
     public void refreshesListaDeEventos() throws RuntimeException {
-        listaDeEventos = new EventoDAO().selectAll(listaDeEventos);
+        listaDeEventos = this.eventoDAO.selectAll(listaDeEventos);
     }
 
     private Evento mapRequestToEvento(HttpServletRequest request) throws Exception {
@@ -147,7 +144,7 @@ public class EventoService {
         String descricao = (String) request.getParameter("descricao");//Fazendo casting. throw ClassCastException
         double valor = Double.parseDouble(request.getParameter("valor"));//Fazendo casting. throw ClassCastException
         int faixaEtaria = Integer.parseInt(request.getParameter("faixaEtaria"));//Fazendo casting. throw ClassCastException
-        
+
 //            Usuario usuario = (Usuario) request.getSession().getAttribute("usuario");//problema esta aqui
         Evento evento = new EventoBuilder()
                 .setDescricao(descricao)
@@ -156,7 +153,7 @@ public class EventoService {
                 .setTipo(tipo)
                 .setValor(valor)
                 .build();
-        
+
         return evento;
     }
 }

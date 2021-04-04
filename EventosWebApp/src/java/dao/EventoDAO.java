@@ -1,16 +1,15 @@
 package dao;
 
-import exceptions.EntityNotFoundException;
 import builder.EventoBuilder;
-import static com.sun.corba.se.impl.util.Utility.printStackTrace;
 import connections.ConnectionFactory;
 import dao.util.enums.EventoColumnsNameEnum;
 import dao.util.enums.NomeTabelaEnum;
 import entidade.Evento;
+import entidade.Imagem;
+import exceptions.EntityNotFoundException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -24,15 +23,11 @@ import java.util.logging.Logger;
  * @since 26/mar/2017
  */
 public class EventoDAO extends ConnectionFactory implements InterfaceDAO<Evento> {
-    
+
     private ImagemEventoDAO imagemEventoDAO;
 
     public EventoDAO(ImagemEventoDAO imagemEventoDAO) {
         this.imagemEventoDAO = imagemEventoDAO;
-    }
-
-    public EventoDAO() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     /**
@@ -66,12 +61,9 @@ public class EventoDAO extends ConnectionFactory implements InterfaceDAO<Evento>
                 return this.findById(id);
             }
 
-        } catch (SQLException | ClassNotFoundException sqle) {
+        } catch (Exception sqle) {
             Logger.getLogger(EventoDAO.class.getName()).log(Level.SEVERE, null, sqle);
-            return null;
-        } catch (Exception ex) {
-            Logger.getLogger(EventoDAO.class.getName()).log(Level.SEVERE, null, ex);
-        } 
+        }
         return null;
     }
 
@@ -90,24 +82,14 @@ public class EventoDAO extends ConnectionFactory implements InterfaceDAO<Evento>
         String sql = "SELECT * FROM " + NomeTabelaEnum.EVENTO + " WHERE " + EventoColumnsNameEnum.ID_EVENTO.value + "  = ? ;";
         PreparedStatement statement = getConnection().prepareStatement(sql);
         statement.setInt(1, id);
-        
+
         ResultSet resultSet = statement.executeQuery();
-        
-        if(resultSet == null) throw new EntityNotFoundException(Integer.valueOf(id).toString());
-        
-        Evento evento = null;
-        while (resultSet.next()) {
-            evento = new EventoBuilder()
-                    .setDescricao(resultSet.getString(EventoColumnsNameEnum.DESCRICAO.value))
-                    .setFaixaEtaria(resultSet.getInt(EventoColumnsNameEnum.FAIXA_ETARIA.value))
-                    .setId_evento(resultSet.getInt(EventoColumnsNameEnum.ID_EVENTO.value))
-                    .setId_usuario(resultSet.getInt(EventoColumnsNameEnum.ID_USUARIO.value))
-                    .setNome(resultSet.getString(EventoColumnsNameEnum.NOME.value))
-                    .setTipo(resultSet.getString(EventoColumnsNameEnum.TIPO_EVENTO.value))
-                    .setValor(resultSet.getDouble(EventoColumnsNameEnum.VALOR.value))
-                    .build();
+
+        if (resultSet == null) {
+            throw new EntityNotFoundException(Integer.valueOf(id).toString());
         }
-        return evento;
+
+        return this.parseResultSetToEvento(resultSet);
     }
 
     public List<Evento> selectAll() {
@@ -116,29 +98,11 @@ public class EventoDAO extends ConnectionFactory implements InterfaceDAO<Evento>
         try {
             PreparedStatement statement = getConnection().prepareStatement(sql);
             ResultSet resultSet = statement.executeQuery();
-
-            while (resultSet.next()) {
-                String tipo = resultSet.getString("tipo_evento");
-                String descricao = resultSet.getString("descricao");
-                double valor = resultSet.getDouble("valor");
-                String nome = resultSet.getString("nome");
-                int id_evento = resultSet.getInt("id_evento");
-                int faixaEtaria = resultSet.getInt("faixaEtaria");
-                Evento evento = new EventoBuilder()
-                        .setFaixaEtaria(faixaEtaria)
-                        .setDescricao(descricao)
-                        .setId_evento(id_evento)
-                        .setNome(nome)
-                        .setValor(valor)
-                        .setImagemList(this.imagemEventoDAO.findByFkEvento(id_evento))
-                        .build();
-                list.add(evento);//adicionando Evento recem criado à list
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(EventoDAO.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(EventoDAO.class.getName()).log(Level.SEVERE, null, ex);
+            list.add(this.parseResultSetToEvento(resultSet));//adicionando Evento recem criado à list
+        } catch (Exception e) {
+            throw new RuntimeException("Ocorreu um erro ao buscar a lista de eventos: " + e.getMessage());
         }
+
         return list;
     }
 
@@ -189,7 +153,7 @@ public class EventoDAO extends ConnectionFactory implements InterfaceDAO<Evento>
             }//fim do while
         } catch (Exception e) {
             throw new RuntimeException("Ocorreu um erro ao buscar a lista de eventos: " + e.getMessage());
-        } 
+        }
         return list;
     }//fim do método 
 
@@ -206,18 +170,10 @@ public class EventoDAO extends ConnectionFactory implements InterfaceDAO<Evento>
         String sql = "SELECT * FROM evento WHERE id_evento = " + id + ";";
         ResultSet resultSet = conectsAndExecutes(sql);
         try {
-            while (resultSet.next()) {
-                evento = new Evento(resultSet.getString("tipo_evento"),
-                        resultSet.getString("descricao"),
-                        resultSet.getDouble("valor"),
-                        resultSet.getInt("faixaEtaria"),
-                        resultSet.getString("nome"),
-                        resultSet.getInt("id_evento")
-                );
-            }
-        } catch (SQLException ex) {
+            evento = parseResultSetToEvento(resultSet);
+        } catch (RuntimeException ex) {
             throw new RuntimeException("Ocorreu um erro ao buscar o evento: " + ex.getMessage());
-        } 
+        }
         return evento;
     }
 
@@ -240,8 +196,9 @@ public class EventoDAO extends ConnectionFactory implements InterfaceDAO<Evento>
 
     /**
      * Finaliza a conexão com o banco
-     * @deprecated - este metodo foi depreciado pois não estou mais utilizando. Estou revendo esta funcionalidade do código
-     * TODO
+     *
+     * @deprecated - este metodo foi depreciado pois não estou mais utilizando.
+     * Estou revendo esta funcionalidade do código TODO
      */
     private void endConnection() {
 
@@ -254,4 +211,26 @@ public class EventoDAO extends ConnectionFactory implements InterfaceDAO<Evento>
 //        }
     }
 
+    private Evento parseResultSetToEvento(ResultSet resultSet) {
+        Evento evento = null;
+        try {
+            while (resultSet.next()) {
+                List<Imagem> imagem = this.imagemEventoDAO.findByFkEvento(resultSet.getInt(EventoColumnsNameEnum.ID_EVENTO.value));
+                evento = new EventoBuilder()
+                        .setDescricao(resultSet.getString(EventoColumnsNameEnum.DESCRICAO.value))
+                        .setFaixaEtaria(resultSet.getInt(EventoColumnsNameEnum.FAIXA_ETARIA.value))
+                        .setId_evento(resultSet.getInt(EventoColumnsNameEnum.ID_EVENTO.value))
+                        .setId_usuario(resultSet.getInt(EventoColumnsNameEnum.ID_USUARIO.value))
+                        .setNome(resultSet.getString(EventoColumnsNameEnum.NOME.value))
+                        .setTipo(resultSet.getString(EventoColumnsNameEnum.TIPO_EVENTO.value))
+                        .setValor(resultSet.getDouble(EventoColumnsNameEnum.VALOR.value))
+                        .setImagemList(imagem)
+                        .build();
+
+            }
+        } catch (SQLException ex) {
+            throw new RuntimeException("Erro ao converter os dados do banco em um evento. Entre em contato com o suporte");
+        }
+        return evento;
+    }
 }

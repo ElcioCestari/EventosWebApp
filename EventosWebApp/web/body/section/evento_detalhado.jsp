@@ -7,14 +7,12 @@
 
 <div class="row">
     <div class="col-md-4">
-        <img src="https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcStfDAuvu8lCkbu5ugjEKhsT00G01fnZLhSAbhNFbiza8MIFZfUjYA8n4A">
-        </img>
-    </div>
+        <img src="${pageContext.request.contextPath}/ExibirImagemServlet?img_path=${evento.listImagem[0].path}" alt="foto do evento" class="img-rounded" width="280" height="210">
     <div class="col-md-8">
         <h3>${evento.nome}</h3>
-        <p>${evento.descricao}</p>
         <p>Valor: ${evento.valor}</p>
         <p>Faixa etaria: ${evento.faixaEtaria}</p>
-        <p>id: ${evento.id_evento}</p>
+        <p>id: ${evento.id_evento}</p>    
+        <p>Descrição: ${evento.descricao}</p>
     </div>
 </div>
