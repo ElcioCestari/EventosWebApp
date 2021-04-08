@@ -29,7 +29,7 @@
             </div>
         </div>
                 
-        <footer class="col-md-12">
+        <footer class="footer">
             <%@include file="body/footer/footer.jsp" %>
         </footer>
     </body>

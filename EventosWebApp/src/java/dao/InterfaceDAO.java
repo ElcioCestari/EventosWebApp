@@ -17,7 +17,7 @@ interface InterfaceDAO<T> {
     /**
      * Deve ser utilizada para deletar um objeto 
      */
-    public void delete();
+    public void delete(Integer id);
     
     /**
      * Deve ser utilizado para fazer um update no banco

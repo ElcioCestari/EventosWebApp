@@ -9,13 +9,12 @@
             <%@include file="body/nav/nav.jsp" %>
         </nav>
         <header class="jumbotron text-center">
-            <%--<%@include file="body/header/header.jsp"%>--%>
+            <%@include file="body/header/header.jsp"%>
         </header>
         <section class="container">
-            <h2>Exibindo eventos</h2>
             <%@include file="body/section/listaDeEventos.jsp"%>
         </section>
-        <footer class="col-md-12">
+        <footer class="footer">
             <%--<%@include file="body/footer/footer.jsp" %>--%>
         </footer>
     </body>

@@ -42,34 +42,41 @@ public class EventoDAO extends ConnectionFactory implements InterfaceDAO<Evento>
     @Override
     public Evento create(Evento evento) {
         try {
-            String sql = "INSERT INTO evento(tipo_evento,valor,nome,faixaEtaria)Values(?,?,?,?);";
-
+            String sql = "INSERT INTO evento(tipo_evento,valor,nome,faixaEtaria,descricao)Values(?,?,?,?,?);";
             PreparedStatement statement = getConnection().prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
-
-            statement.setString(1, evento.getTipo());//valor que será salvo na coluna  tipo_evento
-            statement.setDouble(2, evento.getValor());//valor que será salvo na coluna valor
-            statement.setString(3, evento.getNome());//valor que será salvo na coluna nome
-//            statement.setInt(4, Statement.RETURN_GENERATED_KEYS);//valor que será salvo na coluna id_evento. Essa coluna é uma PRIMARY KEY
-            statement.setInt(4, evento.getFaixaEtaria());//valor que será salvo na coluna faixa_etaria.
-//            statement.setInt(6, evento.getId_usuario());//valor que sera salvo como id_usuario.  CHAVE ESTRANGEIRA
+            statement.setString(1, evento.getTipo());
+            statement.setDouble(2, evento.getValor());
+            statement.setString(3, evento.getNome());
+            statement.setInt(4, evento.getFaixaEtaria());
+            statement.setString(5, evento.getDescricao());
             statement.execute();//executando a instrução SQL.
-
             ResultSet resultSet = statement.getGeneratedKeys();
-
             if (resultSet.next()) {
                 int id = resultSet.getInt(1);
                 return this.findById(id);
             }
-
         } catch (Exception sqle) {
             Logger.getLogger(EventoDAO.class.getName()).log(Level.SEVERE, null, sqle);
+            throw new RuntimeException("erro ao salvar evento");
         }
         return null;
     }
 
     @Override
-    public void delete() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void delete(Integer id) {
+        String sql = "DELETE FROM evento WHERE id=?;";
+        try {
+            Evento evento = this.findById(id);
+            if (evento == null) {
+                throw new ClassNotFoundException("nao foi possivel deletar o evento");
+            }
+            PreparedStatement statement = getConnection().prepareStatement(sql);
+            statement.setInt(1, id);
+            int delete = statement.executeUpdate();
+            if(delete < 1) throw new ClassNotFoundException("nao foi relaizado a exclusão do evento");
+        } catch (Exception ex) {
+            Logger.getLogger(EventoDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @Override
@@ -82,28 +89,22 @@ public class EventoDAO extends ConnectionFactory implements InterfaceDAO<Evento>
         String sql = "SELECT * FROM " + NomeTabelaEnum.EVENTO + " WHERE " + EventoColumnsNameEnum.ID_EVENTO.value + "  = ? ;";
         PreparedStatement statement = getConnection().prepareStatement(sql);
         statement.setInt(1, id);
-
         ResultSet resultSet = statement.executeQuery();
-
         if (resultSet == null) {
             throw new EntityNotFoundException(Integer.valueOf(id).toString());
         }
-
-        return this.parseResultSetToEvento(resultSet);
+        return this.parseResultSetToEvento(resultSet).get(0);
     }
 
     public List<Evento> selectAll() {
-        List<Evento> list = new ArrayList<>();
         String sql = "SELECT * FROM evento;";
         try {
             PreparedStatement statement = getConnection().prepareStatement(sql);
             ResultSet resultSet = statement.executeQuery();
-            list.add(this.parseResultSetToEvento(resultSet));//adicionando Evento recem criado à list
+            return this.parseResultSetToEvento(resultSet);//adicionando Evento recem criado à list
         } catch (Exception e) {
             throw new RuntimeException("Ocorreu um erro ao buscar a lista de eventos: " + e.getMessage());
         }
-
-        return list;
     }
 
     /**
@@ -170,7 +171,7 @@ public class EventoDAO extends ConnectionFactory implements InterfaceDAO<Evento>
         String sql = "SELECT * FROM evento WHERE id_evento = " + id + ";";
         ResultSet resultSet = conectsAndExecutes(sql);
         try {
-            evento = parseResultSetToEvento(resultSet);
+            evento = parseResultSetToEvento(resultSet).get(0);
         } catch (RuntimeException ex) {
             throw new RuntimeException("Ocorreu um erro ao buscar o evento: " + ex.getMessage());
         }
@@ -211,7 +212,8 @@ public class EventoDAO extends ConnectionFactory implements InterfaceDAO<Evento>
 //        }
     }
 
-    private Evento parseResultSetToEvento(ResultSet resultSet) {
+    private List<Evento> parseResultSetToEvento(ResultSet resultSet) {
+        List<Evento> eventos = new ArrayList<>();
         Evento evento = null;
         try {
             while (resultSet.next()) {
@@ -226,11 +228,11 @@ public class EventoDAO extends ConnectionFactory implements InterfaceDAO<Evento>
                         .setValor(resultSet.getDouble(EventoColumnsNameEnum.VALOR.value))
                         .setImagemList(imagem)
                         .build();
-
+                eventos.add(evento);
             }
         } catch (SQLException ex) {
             throw new RuntimeException("Erro ao converter os dados do banco em um evento. Entre em contato com o suporte");
         }
-        return evento;
+        return eventos;
     }
 }

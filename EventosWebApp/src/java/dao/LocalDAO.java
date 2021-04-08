@@ -15,7 +15,7 @@ public class LocalDAO extends ConnectionFactory implements InterfaceDAO<Local> {
     }
 
     @Override
-    public void delete() {
+    public void delete(Integer id) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

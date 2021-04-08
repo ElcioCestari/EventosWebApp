@@ -107,6 +107,5 @@ public class ImagemService {
             
             throw new RuntimeException("ocorreu um erro ao salvar a imagem: " + e.getMessage());
         }
-
     }
 }

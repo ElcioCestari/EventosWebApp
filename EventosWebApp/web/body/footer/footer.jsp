@@ -6,7 +6,7 @@
 --%>
 
 <div class="row">
-    <p class="footer">&copy; 2017 Celso &AMP; Elcio &AMP; Nélio</p>
+    <p>&copy; 2017 Celso &AMP; Elcio &AMP; Nélio</p>
     <ul class="col-sm-8">
         <li class="col-sm-1"><a href="https://twitter.com/?lang=pt-br"><img src="https://s3.amazonaws.com/codecademy-content/projects/make-a-website/lesson-4/twitter.svg"></a>
         </li>
